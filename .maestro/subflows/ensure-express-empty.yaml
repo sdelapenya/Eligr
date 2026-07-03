@@ -1,0 +1,18 @@
+appId: com.anonymous.eligr
+---
+- launchApp:
+    stopApp: true
+- extendedWaitUntil:
+    notVisible: "Preparando Eligr"
+    optional: true
+    timeout: 120000
+- extendedWaitUntil:
+    notVisible: "Cargando tu comparación"
+    timeout: 180000
+- tapOn:
+    id: "tab-options"
+    optional: true
+- extendedWaitUntil:
+    visible:
+      id: "assistant-paste-button"
+    timeout: 120000

@@ -1,0 +1,74 @@
+appId: com.anonymous.eligr
+---
+- runFlow:
+    file: ../subflows/boot.yaml
+- runFlow:
+    file: ../subflows/open-search-edit.yaml
+- assertVisible:
+    id: "search-form"
+- runFlow:
+    when:
+      visible:
+        id: "search-setup-hint"
+    commands:
+      - assertVisible:
+          id: "search-setup-hint"
+- runFlow:
+    when:
+      visible:
+        id: "search-ready-hint"
+    commands:
+      - assertVisible:
+          id: "search-ready-hint"
+      - runFlow:
+          when:
+            visible:
+              id: "search-go-priorities"
+          commands:
+            - assertVisible:
+                id: "search-go-priorities"
+      - runFlow:
+          when:
+            visible:
+              id: "search-go-visit"
+          commands:
+            - assertVisible:
+                id: "search-go-visit"
+      - runFlow:
+          when:
+            visible:
+              id: "search-go-add"
+          commands:
+            - assertVisible:
+                id: "search-go-add"
+- scrollUntilVisible:
+    element:
+      id: "search-form-section-context"
+    direction: DOWN
+    timeout: 60000
+    centerElement: true
+- assertVisible:
+    id: "search-form-title"
+- assertVisible:
+    id: "search-form-city"
+- scrollUntilVisible:
+    element:
+      id: "search-form-destination"
+    direction: DOWN
+    timeout: 60000
+    centerElement: true
+- assertVisible:
+    id: "search-form-destination"
+- scrollUntilVisible:
+    element:
+      id: "search-form-submit"
+    direction: DOWN
+    timeout: 60000
+    centerElement: true
+- tapOn:
+    id: "search-form-submit"
+- extendedWaitUntil:
+    visible: "Habitacion luminosa en Delicias"
+    timeout: 30000
+- tapOn:
+    id: "tab-options"

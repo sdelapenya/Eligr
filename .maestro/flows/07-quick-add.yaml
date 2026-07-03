@@ -1,0 +1,53 @@
+appId: com.anonymous.eligr
+---
+- runFlow:
+    file: ../subflows/boot.yaml
+- tapOn:
+    id: "quick-add-fab"
+- extendedWaitUntil:
+    visible:
+      id: "quick-add-screen"
+    timeout: 15000
+- tapOn:
+    id: "quick-add-title"
+- inputText: "Piso prueba E2E"
+- hideKeyboard
+- scrollUntilVisible:
+    element:
+      id: "quick-add-price"
+    direction: DOWN
+    timeout: 15000
+- tapOn:
+    id: "quick-add-price"
+- eraseText: 10
+- inputText: "820"
+- hideKeyboard
+- scrollUntilVisible:
+    element:
+      id: "quick-add-zone"
+    direction: DOWN
+    timeout: 15000
+- tapOn:
+    id: "quick-add-zone"
+- inputText: "Ruzafa Valencia"
+- hideKeyboard
+- scrollUntilVisible:
+    element:
+      id: "quick-add-save"
+    direction: DOWN
+    timeout: 15000
+- tapOn:
+    id: "quick-add-save"
+- extendedWaitUntil:
+    notVisible:
+      id: "quick-add-screen"
+    timeout: 20000
+- extendedWaitUntil:
+    visible: "Opciones guardadas"
+    timeout: 15000
+- scrollUntilVisible:
+    element: "Piso prueba E2E"
+    direction: DOWN
+    timeout: 90000
+    centerElement: true
+- assertVisible: "Piso prueba E2E"

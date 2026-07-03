@@ -1,0 +1,40 @@
+appId: com.anonymous.eligr
+---
+- runFlow:
+    file: ../subflows/boot.yaml
+- runFlow:
+    file: ../subflows/options-visible.yaml
+- assertVisible:
+    id: "rental-card-rental-1"
+- tapOn:
+    id: "tab-ranking"
+- extendedWaitUntil:
+    visible:
+      id: "ranking-screen"
+    timeout: 30000
+- tapOn:
+    id: "tab-premium"
+- extendedWaitUntil:
+    visible:
+      id: "premium-screen"
+    timeout: 30000
+- scrollUntilVisible:
+    element:
+      id: "premium-toggle-button"
+    direction: DOWN
+    timeout: 60000
+    centerElement: true
+- assertVisible:
+    id: "premium-toggle-button"
+- tapOn:
+    id: "tab-priorities"
+- extendedWaitUntil:
+    visible:
+      id: "priorities-screen"
+    timeout: 30000
+- tapOn:
+    id: "tab-options"
+- runFlow:
+    file: ../subflows/options-visible.yaml
+- assertVisible:
+    id: "rental-card-rental-1"

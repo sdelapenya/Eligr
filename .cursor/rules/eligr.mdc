@@ -1,0 +1,59 @@
+---
+description: Eligr project context and collaboration rules
+alwaysApply: true
+---
+
+# Eligr Rules
+
+Before editing, read:
+
+- `PROJECT_CONTEXT.md`
+- `README.md`
+- `docs/*.md`
+- `docs/cursor-handoff.md`
+
+Eligr is a React Native + Expo + TypeScript local-first MVP for comparing rental options. It is not a marketplace and should not become a marketing landing page.
+
+## Product Shape
+
+Build a calm, practical decision app:
+
+- Manual rental search workflow.
+- Add/edit/delete rental options.
+- Priority weights.
+- Deterministic transparent scoring.
+- Explained ranking with pros, cons, warnings, and tradeoffs.
+- Rental detail and visit notes/checklist direction.
+- Freemium/premium-ready limits.
+
+## Architecture
+
+- Keep domain logic in `src/domain`.
+- Keep Zustand state in `src/store`.
+- Keep reusable components in `src/components`.
+- Keep design primitives in `src/ui`.
+- Keep Expo Router screens in `app`.
+- Keep scoring deterministic and testable.
+- Do not introduce backend/auth/payments until the local workflow is verified.
+- Premium state should be pluggable later for RevenueCat.
+
+## Collaboration
+
+Cursor and Codex may both work on this repo. Avoid conflicts:
+
+- Update `docs/cursor-handoff.md` after each session.
+- Record commands run and verification results.
+- Mention failed installs, partial generated folders, and unresolved TypeScript issues.
+- Do not rewrite broad areas without documenting why.
+- Keep generated folders out of source control.
+
+## Immediate Cursor Task
+
+Clean partial install artifacts if present, run a fresh dependency install, then run:
+
+```powershell
+npm.cmd run typecheck
+npm.cmd run start
+```
+
+Fix compile/runtime issues before adding more features.

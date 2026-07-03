@@ -1,0 +1,36 @@
+appId: com.anonymous.eligr
+---
+- scrollUntilVisible:
+    element:
+      id: "mark-choice-button"
+    direction: UP
+    timeout: 90000
+    centerElement: true
+- tapOn:
+    id: "mark-choice-button"
+- scrollUntilVisible:
+    element:
+      id: "rental-detail-decision-button"
+    direction: DOWN
+    timeout: 60000
+    centerElement: true
+- tapOn:
+    id: "rental-detail-decision-button"
+- extendedWaitUntil:
+    visible:
+      id: "decision-screen"
+    timeout: 15000
+- scrollUntilVisible:
+    element:
+      id: "decision-share-section"
+    direction: DOWN
+    timeout: 60000
+    centerElement: true
+- extendedWaitUntil:
+    visible:
+      id: "decision-share-section"
+    timeout: 15000
+- assertVisible:
+    id: "decision-share-text-button"
+- back
+- back

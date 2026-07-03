@@ -1,0 +1,12 @@
+appId: com.anonymous.eligr
+---
+- openLink: eligr://compare
+- extendedWaitUntil:
+    visible:
+      id: "compare-screen-empty"
+    timeout: 15000
+- assertVisible:
+    id: "compare-empty-state"
+- assertVisible:
+    id: "compare-empty-paste"
+- back

@@ -1,0 +1,55 @@
+appId: com.anonymous.eligr
+---
+- runFlow:
+    file: ../subflows/boot.yaml
+- tapOn:
+    id: "tab-premium"
+- extendedWaitUntil:
+    visible:
+      id: "premium-screen"
+    timeout: 30000
+- scrollUntilVisible:
+    element:
+      id: "premium-toggle-button"
+    direction: DOWN
+    timeout: 60000
+    centerElement: true
+- extendedWaitUntil:
+    visible:
+      id: "premium-toggle-button"
+    timeout: 15000
+- tapOn:
+    id: "premium-toggle-button"
+- assertVisible: "Volver a gratis"
+- tapOn:
+    id: "premium-toggle-button"
+- assertVisible: "Activar preview premium"
+- scrollUntilVisible:
+    element:
+      id: "premium-collaboration-card"
+    direction: DOWN
+    timeout: 60000
+- assertVisible:
+    id: "collaboration-invite-button"
+- scrollUntilVisible:
+    element:
+      id: "premium-share-backup-button"
+    direction: DOWN
+    timeout: 30000
+    centerElement: true
+- assertVisible:
+    id: "premium-share-backup-button"
+- scrollUntilVisible:
+    element:
+      id: "premium-backup-card"
+    direction: DOWN
+    timeout: 60000
+- assertVisible:
+    id: "import-mode-merge"
+- scrollUntilVisible:
+    element: "Recordatorios de visita"
+    direction: UP
+    timeout: 30000
+- assertVisible: "Recordatorios de visita"
+- tapOn:
+    id: "tab-options"

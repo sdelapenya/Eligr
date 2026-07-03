@@ -1,0 +1,23 @@
+appId: com.anonymous.eligr
+---
+- runFlow:
+    file: ../subflows/boot.yaml
+- runFlow:
+    file: ../subflows/options-visible.yaml
+- tapOn:
+    id: "options-add-button"
+- extendedWaitUntil:
+    visible:
+      id: "intake-start-card"
+    timeout: 15000
+- tapOn:
+    id: "intake-paste-mode"
+- extendedWaitUntil:
+    visible: "Pega el anuncio"
+    timeout: 15000
+- tapOn: "Volver"
+- extendedWaitUntil:
+    visible: "Habitacion luminosa en Delicias"
+    timeout: 30000
+- tapOn:
+    id: "tab-options"

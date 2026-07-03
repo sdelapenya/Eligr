@@ -1,0 +1,19 @@
+appId: com.anonymous.eligr
+---
+- scrollUntilVisible:
+    element:
+      id: "rental-visit-section"
+    direction: DOWN
+    timeout: 90000
+    centerElement: true
+- runFlow:
+    when:
+      notVisible:
+        id: "visit-checklist-summary"
+    commands:
+      - tapOn:
+          id: "rental-visit-section"
+- extendedWaitUntil:
+    visible:
+      id: "visit-checklist-summary"
+    timeout: 15000

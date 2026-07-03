@@ -1,0 +1,36 @@
+appId: com.anonymous.eligr
+---
+- launchApp:
+    stopApp: true
+- extendedWaitUntil:
+    notVisible: "Preparando Eligr"
+    optional: true
+    timeout: 120000
+- extendedWaitUntil:
+    notVisible: "Cargando tu comparación"
+    timeout: 180000
+- extendedWaitUntil:
+    visible:
+      id: "onboarding-skip"
+    optional: true
+    timeout: 45000
+- tapOn:
+    id: "onboarding-skip"
+    optional: true
+- tapOn:
+    text: "Saltar"
+    optional: true
+- runFlow:
+    when:
+      visible:
+        id: "sample-banner-dismiss"
+    commands:
+      - tapOn:
+          id: "sample-banner-dismiss"
+- extendedWaitUntil:
+    visible: "Habitacion luminosa en Delicias"
+    timeout: 240000
+- extendedWaitUntil:
+    visible:
+      id: "rental-card-rental-1"
+    timeout: 60000

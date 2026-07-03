@@ -1,0 +1,69 @@
+{
+  "expo": {
+    "name": "Eligr",
+    "slug": "eligr",
+    "version": "0.1.0",
+    "description": "Compara alquileres y decide mejor con scoring transparente.",
+    "orientation": "portrait",
+    "scheme": "eligr",
+    "userInterfaceStyle": "light",
+    "newArchEnabled": true,
+    "ios": {
+      "supportsTablet": true,
+      "bundleIdentifier": "com.anonymous.eligr"
+    },
+    "android": {
+      "adaptiveIcon": {
+        "foregroundImage": "./assets/eligr-logo-icon.png",
+        "backgroundColor": "#F7F3EA"
+      },
+      "icon": "./assets/eligr-logo-icon.png",
+      "package": "com.anonymous.eligr",
+      "versionCode": 1
+    },
+    "web": {
+      "bundler": "metro"
+    },
+    "plugins": [
+      "expo-router",
+      [
+        "expo-splash-screen",
+        {
+          "image": "./assets/eligr-logo-icon.png",
+          "imageWidth": 200,
+          "resizeMode": "contain",
+          "backgroundColor": "#F5F1E8"
+        }
+      ],
+      [
+        "expo-mlkit-ocr",
+        {
+          "iosEngine": "auto"
+        }
+      ],
+      [
+        "expo-build-properties",
+        {
+          "ios": {
+            "deploymentTarget": "16.0"
+          }
+        }
+      ],
+      [
+        "expo-image-picker",
+        {
+          "photosPermission": "Eligr accede a tus fotos para leer capturas de anuncios de alquiler en tu dispositivo."
+        }
+      ],
+      [
+        "expo-notifications",
+        {
+          "color": "#145C53"
+        }
+      ]
+    ],
+    "experiments": {
+      "typedRoutes": true
+    }
+  }
+}

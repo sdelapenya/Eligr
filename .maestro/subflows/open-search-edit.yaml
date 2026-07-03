@@ -1,0 +1,7 @@
+appId: com.anonymous.eligr
+---
+- openLink: eligr://search/edit
+- extendedWaitUntil:
+    visible:
+      id: "search-edit-screen"
+    timeout: 30000

@@ -1,0 +1,9 @@
+appId: com.anonymous.eligr
+---
+- scrollUntilVisible:
+    element:
+      id: "options-add-second-nudge"
+    direction: DOWN
+    timeout: 90000
+    visibilityPercentage: 50
+    centerElement: true

@@ -1,0 +1,42 @@
+appId: com.anonymous.eligr
+---
+- runFlow:
+    file: ../subflows/boot.yaml
+- tapOn:
+    id: "tab-ranking"
+- extendedWaitUntil:
+    visible:
+      id: "ranking-screen"
+    timeout: 30000
+- runFlow:
+    file: ../subflows/scroll-to-ranking-share.yaml
+- assertVisible:
+    id: "ranking-share-button"
+- scrollUntilVisible:
+    element:
+      id: "ranking-compare-button"
+    direction: DOWN
+    timeout: 60000
+    centerElement: true
+- tapOn:
+    id: "ranking-compare-button"
+- extendedWaitUntil:
+    visible:
+      id: "compare-screen"
+    timeout: 15000
+- scrollUntilVisible:
+    element:
+      id: "compare-share-button"
+    direction: DOWN
+    timeout: 60000
+    centerElement: true
+- assertVisible:
+    id: "compare-share-button"
+- back
+- runFlow:
+    file: ../subflows/scroll-to-ranking-share.yaml
+- tapOn:
+    id: "ranking-share-button"
+- pressKey: back
+- tapOn:
+    id: "tab-options"

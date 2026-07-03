@@ -1,0 +1,74 @@
+appId: com.anonymous.eligr
+---
+- runFlow:
+    file: ../subflows/ensure-express-empty.yaml
+- runFlow:
+    file: ../subflows/open-compare-empty.yaml
+- tapOn:
+    id: "assistant-paste-button"
+- extendedWaitUntil:
+    visible:
+      id: "intake-paste-card"
+    timeout: 45000
+- tapOn:
+    id: "intake-paste-example"
+- extendedWaitUntil:
+    notVisible:
+      id: "intake-paste-example"
+    timeout: 15000
+- tapOn:
+    id: "intake-paste-analyze"
+- extendedWaitUntil:
+    visible:
+      id: "intake-confirm-card"
+    timeout: 45000
+- runFlow:
+    file: ../subflows/scroll-to-intake-save.yaml
+- tapOn:
+    id: "intake-confirm-save"
+- extendedWaitUntil:
+    notVisible:
+      id: "intake-confirm-card"
+    timeout: 45000
+- runFlow:
+    file: ../subflows/scroll-to-second-nudge.yaml
+- tapOn:
+    id: "quick-add-fab"
+- extendedWaitUntil:
+    visible:
+      id: "quick-add-screen"
+    timeout: 45000
+- tapOn:
+    id: "quick-add-title"
+- inputText: "Habitacion express E2E 2"
+- hideKeyboard
+- scrollUntilVisible:
+    element:
+      id: "quick-add-price"
+    direction: DOWN
+    timeout: 30000
+- tapOn:
+    id: "quick-add-price"
+- eraseText: 10
+- inputText: "720"
+- hideKeyboard
+- scrollUntilVisible:
+    element:
+      id: "quick-add-zone"
+    direction: DOWN
+    timeout: 30000
+- tapOn:
+    id: "quick-add-zone"
+- inputText: "Malasana Madrid"
+- hideKeyboard
+- scrollUntilVisible:
+    element:
+      id: "quick-add-save"
+    direction: DOWN
+    timeout: 30000
+- tapOn:
+    id: "quick-add-save"
+- extendedWaitUntil:
+    visible:
+      id: "ranking-screen"
+    timeout: 45000

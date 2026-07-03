@@ -1,0 +1,29 @@
+﻿appId: com.anonymous.eligr
+---
+- runFlow:
+    file: ../subflows/boot.yaml
+- runFlow:
+    file: ../subflows/options-visible.yaml
+- tapOn:
+    id: "rental-card-rental-1"
+- extendedWaitUntil:
+    visible:
+      id: "rental-detail-screen"
+    timeout: 15000
+- assertVisible:
+    id: "rental-detail-ranking-nudge"
+- assertVisible: "Habitacion luminosa en Delicias"
+- runFlow:
+    file: ../subflows/scroll-to-visit-checklist.yaml
+- assertVisible:
+    id: "visit-checklist-summary"
+- scrollUntilVisible:
+    element:
+      id: "visit-quick-notes"
+    direction: DOWN
+    timeout: 60000
+    centerElement: true
+- assertVisible:
+    id: "visit-quick-notes"
+- runFlow:
+    file: ../subflows/assert-decision-share.yaml

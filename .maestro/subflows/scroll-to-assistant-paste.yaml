@@ -1,0 +1,8 @@
+appId: com.anonymous.eligr
+---
+- scrollUntilVisible:
+    element:
+      id: "assistant-paste-button"
+    direction: UP
+    timeout: 90000
+    centerElement: true

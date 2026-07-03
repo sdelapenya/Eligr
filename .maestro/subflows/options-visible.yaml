@@ -1,0 +1,8 @@
+appId: com.anonymous.eligr
+---
+- scrollUntilVisible:
+    element:
+      id: "rental-card-rental-1"
+    direction: DOWN
+    timeout: 90000
+    centerElement: true

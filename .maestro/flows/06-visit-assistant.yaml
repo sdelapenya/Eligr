@@ -1,0 +1,68 @@
+appId: com.anonymous.eligr
+---
+- runFlow:
+    file: ../subflows/boot.yaml
+- runFlow:
+    file: ../subflows/options-visible.yaml
+- tapOn:
+    id: "rental-card-rental-1"
+- extendedWaitUntil:
+    visible: "Habitacion luminosa en Delicias"
+    timeout: 30000
+- runFlow:
+    file: ../subflows/scroll-to-visit-checklist.yaml
+- assertVisible:
+    id: "visit-checklist-summary"
+- scrollUntilVisible:
+    element:
+      id: "visit-checklist-assistant-button"
+    direction: DOWN
+    timeout: 60000
+    centerElement: true
+- extendedWaitUntil:
+    visible:
+      id: "visit-checklist-assistant-button"
+    timeout: 30000
+- tapOn:
+    id: "visit-checklist-assistant-button"
+- extendedWaitUntil:
+    visible: "¿Qué comprobaste en la visita?"
+    timeout: 15000
+- tapOn:
+    id: "visit-checklist-ok-noise"
+- scrollUntilVisible:
+    element:
+      id: "visit-wizard-next"
+    direction: DOWN
+    timeout: 60000
+    centerElement: true
+- tapOn:
+    id: "visit-wizard-next"
+- extendedWaitUntil:
+    visible: "Impresión general"
+    timeout: 10000
+- tapOn: "Me gustó, encaja con lo que busco"
+- scrollUntilVisible:
+    element:
+      id: "visit-wizard-next"
+    direction: DOWN
+    timeout: 60000
+    centerElement: true
+- tapOn:
+    id: "visit-wizard-next"
+- extendedWaitUntil:
+    visible: "Próximo paso"
+    timeout: 10000
+- tapOn: "Pedir copia del contrato"
+- scrollUntilVisible:
+    element: "Guardar visita"
+    direction: DOWN
+    timeout: 90000
+    centerElement: true
+- tapOn: "Guardar visita"
+- extendedWaitUntil:
+    visible: "Visita registrada"
+    timeout: 15000
+- tapOn: "Listo"
+- tapOn:
+    id: "tab-options"

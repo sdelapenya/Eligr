@@ -1,0 +1,8 @@
+appId: com.anonymous.eligr
+---
+- scrollUntilVisible:
+    element:
+      id: "intake-confirm-save"
+    direction: DOWN
+    timeout: 60000
+    centerElement: true
