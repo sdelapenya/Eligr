@@ -1,6 +1,6 @@
 # Cursor Handoff - Eligr
 
-Last updated: 2026-06-29 (Cursor session 57: decisión, HTML, E2E express)
+Last updated: 2026-07-03 (Cursor session 74: git dual remotes + push policy)
 
 ## Project Goal
 
@@ -2907,4 +2907,38 @@ adb install -r "E:\Eligr\dist\Eligr-0.1.0-release-arm64.apk"
 O copia el archivo al teléfono (Drive, cable, etc.) y ábrelo desde el gestor de archivos (permite «orígenes desconocidos» si Android lo pide).
 
 **Nota:** release instalable sin PC/Metro. Es build de prueba con keystore debug hasta definir firma Play.
+
+## Session 74 - Git inicial y push dual Gitea + GitHub (Cursor, 2026-07-03)
+
+### Git setup
+- `git init` + commit inicial `13fdf89` (`Initial commit: Eligr MVP local-first (Expo RN + TypeScript).`, 180 archivos).
+- `.gitignore` ampliado: excluye `node_modules`, `dist/`, `android/`, `ios/`, `.expo/`, temporales, IDE.
+- Rama local: **`master`**.
+
+### Remotos configurados
+
+| Remote | URL |
+|--------|-----|
+| `gitea` | `http://192.168.1.19:3000/sdelapenya/Eligr.git` |
+| `github` | `https://github.com/sdelapenya/Eligr.git` |
+
+Push inicial OK en ambos (Gitea vía Git Credential Manager OAuth; GitHub HTTPS).
+Upstream local actual: `github/master`.
+
+### Política acordada con el usuario
+- Tras cambios **importantes** de sesión, el agente hace push a **gitea** y **github** cuando el usuario lo pida ("sube los cambios", "handoff + push", "commit y push").
+- Commit solo con petición explícita del usuario.
+- Regla fijada en `.cursor/rules/eligr.mdc` (sección Git remotes and push).
+
+### Comandos de push habituales
+
+```powershell
+Set-Location e:\Eligr
+git push gitea master
+git push github master
+```
+
+### Recommended next
+- Probar APK `dist/Eligr-0.1.0-release-arm64.apk` en móvil real y anotar fricciones UX.
+- Definir `applicationId` definitivo antes de Play Internal Testing.
 

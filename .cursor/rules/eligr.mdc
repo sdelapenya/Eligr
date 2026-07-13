@@ -47,13 +47,24 @@ Cursor and Codex may both work on this repo. Avoid conflicts:
 - Do not rewrite broad areas without documenting why.
 - Keep generated folders out of source control.
 
-## Immediate Cursor Task
+## Git remotes and push
 
-Clean partial install artifacts if present, run a fresh dependency install, then run:
+The repo is tracked on **two remotes** (branch `master`):
+
+| Remote | URL |
+|--------|-----|
+| `gitea` | `http://192.168.1.19:3000/sdelapenya/Eligr.git` |
+| `github` | `https://github.com/sdelapenya/Eligr.git` |
+
+After **important session changes**, when the user asks to upload (e.g. "sube los cambios", "handoff + push", "commit y push"):
+
+1. Commit only if the user explicitly requests it.
+2. Update `docs/cursor-handoff.md` when closing a substantive session.
+3. Push both remotes:
 
 ```powershell
-npm.cmd run typecheck
-npm.cmd run start
+git push gitea master
+git push github master
 ```
 
-Fix compile/runtime issues before adding more features.
+Do not push automatically on every small edit. Do not commit without explicit user approval.
