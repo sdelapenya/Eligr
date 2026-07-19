@@ -1,6 +1,7 @@
-import { useMemo } from "react";
+import { useCallback, useMemo } from "react";
 import { Pressable, StyleSheet, View } from "react-native";
 
+import { useDebouncedTextField } from "@/hooks/useDebouncedValue";
 import { quickRating } from "@/domain/listing-import/to-form";
 import { RentalOption } from "@/domain/types";
 import { useEligrStore } from "@/store/useEligrStore";
@@ -35,9 +36,13 @@ export function PartnerOpinionCard({ option, compact = false }: PartnerOpinionCa
     showToast("Opinión guardada");
   };
 
-  const setNote = (partnerNote: string) => {
-    updateRentalOption(option.id, { partnerNote, updatedAt: new Date().toISOString() });
-  };
+  const commitNote = useCallback(
+    (partnerNote: string) => {
+      updateRentalOption(option.id, { partnerNote, updatedAt: new Date().toISOString() });
+    },
+    [option.id, updateRentalOption],
+  );
+  const [noteDraft, setNoteDraft] = useDebouncedTextField(option.partnerNote ?? "", commitNote);
 
   const clearOpinion = () => {
     updateRentalOption(option.id, {
@@ -77,8 +82,8 @@ export function PartnerOpinionCard({ option, compact = false }: PartnerOpinionCa
       {!compact ? (
         <Input
           label="Nota breve (opcional)"
-          value={option.partnerNote ?? ""}
-          onChangeText={setNote}
+          value={noteDraft}
+          onChangeText={setNoteDraft}
           placeholder="Ej.: le gusta la luz pero le preocupa el ruido"
           testID={`partner-note-${option.id}`}
         />

@@ -43,7 +43,13 @@ export default function RankingScreen() {
   const chosenOption = rentalOptions.find((option) => option.id === chosenOptionId);
   const activeOptions = useMemo(() => getActiveOptions(rentalOptions), [rentalOptions]);
   const pool = useMemo(() => getScoringPool(rentalOptions), [rentalOptions]);
-  const scoreContext = getScoreContext(search);
+  const scoreContext = useMemo(
+    () => getScoreContext(search),
+    // Depend on the primitive fields getScoreContext actually reads, not the whole
+    // `search` object, otherwise this (and the ranking below) recompute every render.
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+    [search.maxBudget, search.moveInDate, search.rentalTypes],
+  );
   const ranking = useMemo(
     () => (activeOptions.length > 0 ? rankRentals(pool, search.priorities, scoreContext) : []),
     [activeOptions.length, pool, search.priorities, scoreContext],

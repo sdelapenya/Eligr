@@ -33,7 +33,7 @@ export function getMergeStats(existing: RentalOption[], imported: RentalOption[]
       continue;
     }
     const current = existing.find((item) => item.id === option.id);
-    if (current && option.updatedAt > current.updatedAt) {
+    if (current && option.updatedAt >= current.updatedAt) {
       updatedOptions += 1;
     }
   }

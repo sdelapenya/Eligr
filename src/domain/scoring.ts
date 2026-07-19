@@ -80,7 +80,7 @@ export function scoreRental(
     ),
     location: round(option.locationRating * 10),
     safety: round((option.contractAvailable ? 82 : 34) + (option.sourceUrl ? 8 : 0)),
-    roomQuality: round(option.roomQualityRating * 10 + (option.furnished ? 5 : -8)),
+    roomQuality: round(clamp(option.roomQualityRating * 10 + (option.furnished ? 5 : -8))),
     privacy: option.rentalType === "studio" || option.rentalType === "flat" ? 95 : option.bathroomType === "private" ? 75 : 48,
     billsIncluded: option.billsIncluded ? 100 : round(clamp(78 - option.estimatedBills / 2)),
     availability: dateAvailabilityScore(option.availableDate, context?.moveInDate),

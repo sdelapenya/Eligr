@@ -3,7 +3,7 @@ import { useState } from "react";
 import { Image, Pressable, StyleSheet, View } from "react-native";
 
 import { showAlert } from "@/utils/alert";
-import { persistRentalPhotoUri } from "@/utils/rental-photo";
+import { deletePersistedPhoto, persistRentalPhotoUri } from "@/utils/rental-photo";
 import { Button } from "@/ui/Button";
 import { Text } from "@/ui/Text";
 import { radius, spacing } from "@/ui/theme";
@@ -41,6 +41,7 @@ export function RentalPhotoPicker({ value, onChange }: RentalPhotoPickerProps) {
           showAlert("Error", "No se pudo guardar la foto. Inténtalo de nuevo.");
           return;
         }
+        if (value && value !== persistedUri) deletePersistedPhoto(value);
         onChange(persistedUri);
       } finally {
         setSaving(false);
@@ -68,7 +69,16 @@ export function RentalPhotoPicker({ value, onChange }: RentalPhotoPickerProps) {
           onPress={pickPhoto}
           disabled={saving}
         />
-        {value ? <Button label="Quitar" variant="ghost" onPress={() => onChange(undefined)} /> : null}
+        {value ? (
+          <Button
+            label="Quitar"
+            variant="ghost"
+            onPress={() => {
+              deletePersistedPhoto(value);
+              onChange(undefined);
+            }}
+          />
+        ) : null}
       </View>
     </View>
   );

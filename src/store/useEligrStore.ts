@@ -10,8 +10,9 @@ import { getActiveOptions, isDiscarded } from "@/domain/filters";
 import { FREE_TIER_LIMITS, canAddRentalOption, canReactivateFromDiscarded } from "@/domain/limits";
 import { withVisitDefaults } from "@/domain/rental-defaults";
 import { isUsingSampleData } from "@/domain/sample-data";
-import { createEmptySearch, defaultPriorities, sampleRentalOptions, sampleSearch } from "@/domain/seed";
-import { cancelVisitDebriefReminders, scheduleVisitDebriefReminders } from "@/domain/visit-reminders";
+import { createEmptySearch, sampleRentalOptions, sampleSearch, sanitizePriorityWeights } from "@/domain/seed";
+import { cancelVisitDebriefReminders, scheduleVisitDebriefReminders, syncAllVisitReminders } from "@/domain/visit-reminders";
+import { deletePersistedPhoto } from "@/utils/rental-photo";
 import { RentalOption, RentalSearch, PriorityWeights, RentalStatus, RentalType } from "@/domain/types";
 import { ThemeMode } from "@/ui/theme";
 import { VisitDebriefPayload } from "@/domain/visit-debrief";
@@ -104,7 +105,7 @@ function normalizeSearch(search?: RentalSearch): RentalSearch {
   return {
     ...sampleSearch,
     ...search,
-    priorities: { ...defaultPriorities, ...search.priorities },
+    priorities: sanitizePriorityWeights(search.priorities, sampleSearch.priorities),
   };
 }
 
@@ -188,6 +189,8 @@ export const useEligrStore = create<EligrState>()(
         })),
       deleteRentalOption: (id) => {
         cancelVisitDebriefReminders(id).catch(() => undefined);
+        const optionToDelete = get().rentalOptions.find((option) => option.id === id);
+        deletePersistedPhoto(optionToDelete?.photoUri);
         set((state) => ({
           rentalOptions: state.rentalOptions.filter((option) => option.id !== id),
           appMeta:
@@ -344,6 +347,7 @@ export const useEligrStore = create<EligrState>()(
             themeMode: currentAppMeta.themeMode ?? "system",
           },
         });
+        syncAllVisitReminders(nextOptions, currentAppMeta.visitRemindersEnabled).catch(() => undefined);
         return "imported";
       },
       setVisitRemindersEnabled: (enabled) => {
@@ -395,6 +399,9 @@ export const useEligrStore = create<EligrState>()(
       }),
       onRehydrateStorage: () => (state) => {
         state?.setHasHydrated(true);
+        if (state) {
+          syncAllVisitReminders(state.rentalOptions, state.appMeta.visitRemindersEnabled).catch(() => undefined);
+        }
       },
     },
   ),

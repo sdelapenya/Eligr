@@ -1,6 +1,6 @@
 import { withVisitDefaults } from "./rental-defaults";
 import { emptyVisitChecklist } from "./visit-checklist";
-import { PriorityWeights, RentalOption, RentalSearch } from "./types";
+import { PriorityKey, PriorityWeights, RentalOption, RentalSearch } from "./types";
 
 const now = new Date("2026-06-06T10:00:00.000Z").toISOString();
 
@@ -16,6 +16,34 @@ export const defaultPriorities: PriorityWeights = {
   availability: 5,
   personalFeeling: 7,
 };
+
+const priorityKeys: PriorityKey[] = [
+  "price",
+  "moveInCost",
+  "commute",
+  "location",
+  "safety",
+  "roomQuality",
+  "privacy",
+  "billsIncluded",
+  "availability",
+  "personalFeeling",
+];
+
+/**
+ * Keeps only known priority keys and clamps each weight to [0, 10], falling
+ * back to the default weight when the value is missing/invalid. Prevents
+ * corrupt or hand-edited backups/JSON from injecting bogus keys or values
+ * that would silently distort the scoring's totalWeight and dilute results.
+ */
+export function sanitizePriorityWeights(raw: unknown, fallback: PriorityWeights = defaultPriorities): PriorityWeights {
+  const record = raw && typeof raw === "object" ? (raw as Record<string, unknown>) : {};
+  return priorityKeys.reduce((acc, key) => {
+    const value = Number(record[key]);
+    acc[key] = Number.isFinite(value) ? Math.min(10, Math.max(0, value)) : fallback[key];
+    return acc;
+  }, {} as PriorityWeights);
+}
 
 function defaultMoveInDate() {
   const date = new Date();

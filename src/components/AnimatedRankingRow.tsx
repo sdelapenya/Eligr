@@ -13,10 +13,11 @@ export function AnimatedRankingRow({ children, rank, optionId }: AnimatedRanking
 
   useEffect(() => {
     if (rank === undefined) return;
+    let animation: Animated.CompositeAnimation | undefined;
     if (prevRank.current !== undefined && prevRank.current !== rank) {
       scale.setValue(0.98);
       opacity.setValue(0.72);
-      Animated.parallel([
+      animation = Animated.parallel([
         Animated.timing(scale, {
           toValue: 1,
           duration: 320,
@@ -29,9 +30,11 @@ export function AnimatedRankingRow({ children, rank, optionId }: AnimatedRanking
           easing: Easing.out(Easing.cubic),
           useNativeDriver: true,
         }),
-      ]).start();
+      ]);
+      animation.start();
     }
     prevRank.current = rank;
+    return () => animation?.stop();
   }, [rank, optionId, opacity, scale]);
 
   return (

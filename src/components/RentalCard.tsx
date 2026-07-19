@@ -33,7 +33,7 @@ function RentalCardComponent({ option, score, rank, maxBudget, scoreContribution
   const setStatus = useEligrStore((state) => state.setStatus);
   const scoreTone = score.overallScore >= 75 ? colors.scoreHigh : score.overallScore >= 55 ? colors.scoreMid : colors.warning;
   const discarded = isDiscarded(option);
-  const budgetFit = maxBudget ? getBudgetFit(option, maxBudget) : null;
+  const budgetFit = maxBudget != null && maxBudget > 0 ? getBudgetFit(option, maxBudget) : null;
   const estimatedCommute = usesEstimatedCommute(option);
 
   const openQuickActions = () => {

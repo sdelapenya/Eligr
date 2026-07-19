@@ -1,6 +1,6 @@
 import { getActiveOptions } from "./filters";
 import { FREE_TIER_LIMITS } from "./limits";
-import { defaultPriorities } from "./seed";
+import { sanitizePriorityWeights } from "./seed";
 import { getMergeStats, mergeRentalOptions, type ImportBackupMode } from "./collaboration";
 import { BathroomType, RentalOption, RentalSearch, RentalStatus, RentalType } from "./types";
 import {
@@ -81,6 +81,31 @@ function pickEnum<T extends string>(value: unknown, allowed: T[], fallback: T) {
   return typeof value === "string" && allowed.includes(value as T) ? (value as T) : fallback;
 }
 
+function sanitizeRentalTypes(raw: unknown): RentalType[] {
+  if (!Array.isArray(raw)) return ["room"];
+  const valid = raw.filter((value): value is RentalType => rentalTypes.includes(value as RentalType));
+  return valid.length > 0 ? valid : ["room"];
+}
+
+function sanitizeSearch(raw: Partial<RentalSearch> | undefined): RentalSearch | null {
+  if (!raw || typeof raw.id !== "string" || typeof raw.title !== "string") return null;
+  const nowIso = new Date().toISOString();
+  return {
+    id: raw.id,
+    title: raw.title.trim() || "Búsqueda importada",
+    city: typeof raw.city === "string" ? raw.city : "",
+    area: typeof raw.area === "string" ? raw.area : "",
+    rentalTypes: sanitizeRentalTypes(raw.rentalTypes),
+    maxBudget: Math.max(0, finiteNumber(raw.maxBudget, 0)),
+    moveInDate: typeof raw.moveInDate === "string" ? raw.moveInDate : "",
+    destinationLabel: typeof raw.destinationLabel === "string" ? raw.destinationLabel : "",
+    priorities: sanitizePriorityWeights(raw.priorities),
+    isPremium: Boolean(raw.isPremium),
+    createdAt: typeof raw.createdAt === "string" ? raw.createdAt : nowIso,
+    updatedAt: typeof raw.updatedAt === "string" ? raw.updatedAt : nowIso,
+  };
+}
+
 function sanitizeRentalOption(raw: Partial<RentalOption>): RentalOption | null {
   if (!raw || typeof raw.id !== "string" || typeof raw.title !== "string") return null;
   const commute = raw.commuteMinutes === undefined ? undefined : finiteNumber(raw.commuteMinutes, NaN);
@@ -132,7 +157,7 @@ export function buildBackup(
     exportedAt: new Date().toISOString(),
     search: {
       ...search,
-      priorities: { ...defaultPriorities, ...search.priorities },
+      priorities: sanitizePriorityWeights(search.priorities),
     },
     rentalOptions,
     ...(appMeta ? { appMeta } : {}),
@@ -206,6 +231,9 @@ export function parseBackup(raw: string): EligrBackup | null {
     if (!data || data.version !== BACKUP_VERSION) return null;
     if (!data.search || !Array.isArray(data.rentalOptions)) return null;
 
+    const search = sanitizeSearch(data.search);
+    if (!search) return null;
+
     const rentalOptions = data.rentalOptions
       .map((option) => sanitizeRentalOption(option as Partial<RentalOption>))
       .filter((option): option is RentalOption => option !== null);
@@ -228,11 +256,7 @@ export function parseBackup(raw: string): EligrBackup | null {
     return {
       version: BACKUP_VERSION,
       exportedAt: data.exportedAt ?? new Date().toISOString(),
-      search: {
-        ...data.search,
-        maxBudget: Math.max(0, finiteNumber(data.search.maxBudget, 0)),
-        priorities: { ...defaultPriorities, ...data.search.priorities },
-      },
+      search,
       rentalOptions,
       ...(appMeta ? { appMeta } : {}),
     };

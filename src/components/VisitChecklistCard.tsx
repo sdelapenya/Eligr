@@ -1,5 +1,6 @@
 import { StyleSheet, View } from "react-native";
 
+import { useDebouncedTextField } from "@/hooks/useDebouncedValue";
 import {
   ChecklistStatus,
   VisitChecklist,
@@ -97,6 +98,9 @@ export function VisitQuickNotesCard({
   onChangeImpression,
   onChangeNextAction,
 }: VisitQuickNotesCardProps) {
+  const [impressionDraft, setImpressionDraft] = useDebouncedTextField(visitImpression, onChangeImpression);
+  const [nextActionDraft, setNextActionDraft] = useDebouncedTextField(visitNextAction, onChangeNextAction);
+
   return (
     <Card testID="visit-quick-notes">
       <View style={styles.header}>
@@ -109,8 +113,8 @@ export function VisitQuickNotesCard({
 
       <Input
         label="Impresión tras la visita"
-        value={visitImpression}
-        onChangeText={onChangeImpression}
+        value={impressionDraft}
+        onChangeText={setImpressionDraft}
         placeholder="Luz, olores, ruido de fondo, sensación general..."
         multiline
         style={styles.multiline}
@@ -118,8 +122,8 @@ export function VisitQuickNotesCard({
 
       <Input
         label="Próximo paso"
-        value={visitNextAction}
-        onChangeText={onChangeNextAction}
+        value={nextActionDraft}
+        onChangeText={setNextActionDraft}
         placeholder="Pedir contrato, segunda visita, negociar precio..."
         multiline
         style={styles.multiline}
