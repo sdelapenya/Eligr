@@ -293,16 +293,23 @@ export default function RentalDetailScreen() {
       <SectionHeader title="Estado" detail="Marca el avance de la decisión" />
       <StatusChipRow value={option.status} onChange={handleStatusChange} />
 
-      <CollapsibleSection title="Desglose y análisis" detail="Puntuación, pros, contras y avisos">
+      <CollapsibleSection title="Desglose y análisis" detail="Criterio 0–100 y puntos que aporta al total">
         <Card>
-          {Object.entries(score.weightedBreakdown).map(([key, value]) => (
-            <ScoreBar
-              key={key}
-              label={priorityLabels[key as keyof typeof priorityLabels]}
-              value={value}
-              max={Math.max(...Object.values(score.weightedBreakdown), 1)}
-            />
-          ))}
+          <Text variant="caption" style={{ marginBottom: 8 }}>
+            La barra es la nota del criterio (0–100). A la derecha ves cuánto aporta al score según tus prioridades.
+          </Text>
+          {Object.entries(score.breakdown).map(([key, raw]) => {
+            const weighted = score.weightedBreakdown[key as keyof typeof score.weightedBreakdown] ?? 0;
+            return (
+              <ScoreBar
+                key={key}
+                label={priorityLabels[key as keyof typeof priorityLabels]}
+                value={raw}
+                max={100}
+                detail={`${raw} → +${weighted} pts`}
+              />
+            );
+          })}
         </Card>
 
         <View style={styles.columns}>

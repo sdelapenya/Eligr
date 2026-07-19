@@ -5,7 +5,7 @@ export const priorityLabels: Record<PriorityKey, string> = {
   moveInCost: "Entrada",
   commute: "Trayecto",
   location: "Zona",
-  safety: "Contrato",
+  safety: "Contrato / papeles",
   roomQuality: "Calidad",
   privacy: "Privacidad",
   billsIncluded: "Gastos",
@@ -16,7 +16,7 @@ export const priorityLabels: Record<PriorityKey, string> = {
 export const statusLabels: Record<RentalStatus, string> = {
   new: "Nuevo",
   contacted: "Contactado",
-  visit_planned: "Visita",
+  visit_planned: "Visita planificada",
   visited: "Visitado",
   favorite: "Favorito",
   discarded: "Descartado",

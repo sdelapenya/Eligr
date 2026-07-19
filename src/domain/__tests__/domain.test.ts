@@ -25,14 +25,22 @@ function assert(condition: boolean, message: string) {
 
 function run() {
   assert(statusFromImpressionChip("") === undefined, "empty impression does not change status");
-  assert(statusFromImpressionChip("No convence, descartaría") === "discarded", "discard chip");
+  assert(statusFromImpressionChip("No convence, descartaría") === "visited", "impression never auto-discards");
   assert(
     resolveVisitDebriefStatus("", "", 0, "new") === "new",
     "empty debrief keeps status",
   );
   assert(
-    resolveVisitDebriefStatus("Me gustó, encaja con lo que busco", "", 1, "new") === "favorite",
-    "positive impression",
+    resolveVisitDebriefStatus("Me gustó, encaja con lo que busco", "", 1, "new") === "visited",
+    "positive impression marks visited only",
+  );
+  assert(
+    resolveVisitDebriefStatus("Me gustó", "Marcar como favorita", 1, "new") === "favorite",
+    "explicit next-action can set favorite",
+  );
+  assert(
+    resolveVisitDebriefStatus("", "Descartar esta opción", 0, "visited") === "discarded",
+    "explicit next-action can discard",
   );
 
   const parsed = parsePastedListingText("Habitación en Chamberí\n750 €/mes\nGastos incluidos");
@@ -125,6 +133,9 @@ function run() {
 
   const quick = buildQuickAddRental({ title: "Piso test", monthlyPrice: 650, locationLabel: "Ruzafa" });
   assert(quick.monthlyPrice === 650 && quick.locationLabel === "Ruzafa", "quick add rental");
+  assert(quick.contractAvailable === false, "quick add does not invent contract");
+  assert(quick.deposit === 0 && quick.estimatedBills === 0, "quick add leaves costs unknown");
+  assert(quick.locationRating === 5, "quick add uses neutral ratings");
 
   const quickWithPhoto = buildQuickAddRental({
     title: "Piso test",

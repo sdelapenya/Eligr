@@ -12,7 +12,7 @@ if (-not $SdkRoot) {
 }
 $adb = Join-Path $SdkRoot "platform-tools\adb.exe"
 $apk = Join-Path $ProjectRoot "android\app\build\outputs\apk\debug\app-debug.apk"
-$package = "com.anonymous.eligr"
+$package = "com.sdelapenya.eligr"
 
 if (-not (Test-Path $adb)) {
   Write-Error "No encuentro adb en $adb"
@@ -39,7 +39,7 @@ function Test-EligrLaunchable {
   $xml = (& $adb @AdbArgs shell cat /sdcard/eligr-apk-probe.xml 2>$null | Out-String)
   $ErrorActionPreference = $previous
   if ($xml -match "keeps stopping|aerr_close|libreactnative") { return $false }
-  return ($xml -match "com.anonymous.eligr")
+  return ($xml -match "com.sdelapenya.eligr")
 }
 
 $targetAbi = if ($env:ELIGR_E2E_ABI) { $env:ELIGR_E2E_ABI } else { Get-DeviceAbi -AdbArgs $adbArgs }

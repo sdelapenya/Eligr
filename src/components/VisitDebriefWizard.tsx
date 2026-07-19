@@ -115,7 +115,7 @@ export function VisitDebriefWizard({ option, onComplete, onCancel }: VisitDebrie
       {step === "impression" ? (
         <Card>
           <Text variant="subtitle">Impresión general</Text>
-          <Text variant="caption">Una frase basta. Afectará pros, contras y la sensación personal en el ranking.</Text>
+          <Text variant="caption">Una frase basta. Afecta pros/contras y sensación en el ranking; no cambia Favorito/Descartado sola.</Text>
           <View style={styles.chips}>
             {impressionChips.map((chip, index) => (
               <Pressable
@@ -149,7 +149,9 @@ export function VisitDebriefWizard({ option, onComplete, onCancel }: VisitDebrie
       {step === "next" ? (
         <Card>
           <Text variant="subtitle">Próximo paso</Text>
-          <Text variant="caption">¿Qué harás con esta opción?</Text>
+          <Text variant="caption">
+            ¿Qué harás con esta opción? Solo «Marcar como favorita» o «Descartar esta opción» cambian el estado.
+          </Text>
           <View style={styles.chips}>
             {nextActionChips.map((chip) => (
               <Pressable

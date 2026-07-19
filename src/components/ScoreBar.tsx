@@ -7,11 +7,14 @@ import { useThemeColors } from "@/ui/theme-context";
 
 type ScoreBarProps = {
   label: string;
+  /** Valor de la barra (normalmente 0–100 del criterio). */
   value: number;
   max?: number;
+  /** Texto a la derecha, p.ej. "70 → +14 pts". */
+  detail?: string;
 };
 
-export function ScoreBar({ label, value, max = 100 }: ScoreBarProps) {
+export function ScoreBar({ label, value, max = 100, detail }: ScoreBarProps) {
   const { colors } = useThemeColors();
   const styles = useMemo(() => createStyles(colors), [colors]);
   const percent = max > 0 ? Math.max(4, Math.min(100, (value / max) * 100)) : 4;
@@ -19,8 +22,10 @@ export function ScoreBar({ label, value, max = 100 }: ScoreBarProps) {
   return (
     <View style={styles.wrap}>
       <View style={styles.row}>
-        <Text variant="caption">{label}</Text>
-        <Text variant="caption">{value}</Text>
+        <Text variant="caption" style={styles.label}>
+          {label}
+        </Text>
+        <Text variant="caption">{detail ?? String(value)}</Text>
       </View>
       <View style={styles.track}>
         <View style={[styles.fill, { width: `${percent}%` }]} />
@@ -38,6 +43,10 @@ function createStyles(colors: ColorPalette) {
       alignItems: "center",
       flexDirection: "row",
       justifyContent: "space-between",
+      gap: spacing.sm,
+    },
+    label: {
+      flex: 1,
     },
     track: {
       backgroundColor: colors.inkSoft,

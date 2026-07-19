@@ -1,19 +1,21 @@
 # Política de privacidad — Eligr
 
-**Última actualización:** julio de 2026
+**Última actualización:** 18 de julio de 2026
 
 Eligr («la app») ayuda a comparar opciones de alquiler y tomar decisiones. Esta política describe el tratamiento de datos en la versión actual (local-first, sin cuenta).
 
 ## Responsable
 
-Sustituye este apartado por el nombre o razón social del titular antes de publicar en Play Console.
+**Sergio de la Peña**  
+Correo de contacto: sergiodelapenya1991@gmail.com  
+España
 
 ## Datos que usa la app
 
 - **Datos que introduces tú:** búsquedas, opciones de alquiler, prioridades, notas de visita y copias de seguridad que exportes.
 - **Almacenamiento:** los datos se guardan **solo en tu dispositivo** (almacenamiento local de la app). No enviamos tu contenido a servidores propios en esta versión.
 - **Permisos opcionales:**
-  - **Fotos / galería:** para leer capturas de anuncios si usas esa función.
+  - **Fotos / galería:** para leer capturas de anuncios si usas esa función (OCR en el dispositivo).
   - **Notificaciones:** para recordatorios de visita si los activas.
 
 ## Datos que no recopilamos
@@ -24,7 +26,7 @@ Sustituye este apartado por el nombre o razón social del titular antes de publi
 
 ## Copias de seguridad y compartir
 
-Si exportas o compartes un archivo de backup, tú decides dónde guardarlo o con quién compartirlo. Ese archivo puede incluir toda la información de tu búsqueda.
+Si exportas o compartes un archivo de backup o un informe, **tú** decides dónde guardarlo o con quién compartirlo. Ese archivo puede incluir la información de tu búsqueda.
 
 ## Conservación y eliminación
 
@@ -36,4 +38,6 @@ Publicaremos cambios en esta página. La fecha de «Última actualización» se 
 
 ## Contacto
 
-Sustituye por un correo de contacto antes de enlazar esta URL en Google Play Console.
+Para ejercer derechos o hacer preguntas sobre esta política: **sergiodelapenya1991@gmail.com**
+
+Versión publicada: https://sergio.sdelapenya.dev/eligr/privacy/

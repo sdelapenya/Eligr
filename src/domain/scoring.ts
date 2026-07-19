@@ -167,6 +167,10 @@ function buildWarnings(option: RentalOption, context?: ScoreContext) {
   if (!option.contractAvailable) warnings.push("Sin contrato confirmado.");
   if (!option.sourceUrl) warnings.push("Falta URL o fuente guardada.");
   if (!Number.isFinite(option.commuteMinutes)) warnings.push("Falta estimar el trayecto.");
+  if (option.deposit <= 0) warnings.push("Fianza no indicada.");
+  if (!option.billsIncluded && option.estimatedBills <= 0) {
+    warnings.push("Gastos mensuales no estimados.");
+  }
   if (option.agencyFee > 0) warnings.push("Incluye honorarios de agencia.");
   if (!option.availableDate) warnings.push("Disponibilidad sin fecha clara.");
   if (context?.maxBudget && getBudgetDelta(option, context.maxBudget) > 0) {

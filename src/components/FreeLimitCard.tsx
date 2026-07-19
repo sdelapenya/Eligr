@@ -17,8 +17,8 @@ export function FreeLimitCard({ activeCount, onViewDiscarded }: FreeLimitCardPro
     <Card variant="muted" testID="free-limit-card">
       <Text variant="subtitle">Límite free alcanzado</Text>
       <Text>
-        Tienes {activeCount} de {FREE_TIER_LIMITS.rentalOptions} opciones activas. Descarta alguna, recupera una
-        descartada o activa el preview premium para seguir añadiendo.
+        Tienes {activeCount} de {FREE_TIER_LIMITS.rentalOptions} opciones activas. Descarta alguna para liberar hueco.
+        Premium (opciones ilimitadas) llegará pronto; mientras tanto usa descartadas.
       </Text>
       <View style={styles.actions}>
         {onViewDiscarded ? (

@@ -99,6 +99,16 @@ export default function RankingScreen() {
     await shareContent({ message: buildRankingShareSummary(search, ranking, limit) });
   };
 
+  const openShareMenu = () => {
+    showAlert("Compartir ranking", "Elige cómo quieres compartirlo.", [
+      { text: "Cancelar", style: "cancel" },
+      { text: "Resumen (texto)", onPress: () => void shareSummary() },
+      { text: "Imagen top", onPress: () => void shareImage() },
+      { text: "Informe HTML", onPress: () => void exportReport() },
+      { text: "Invitar a comparar", onPress: () => void inviteToCompare() },
+    ]);
+  };
+
   const exportReport = async () => {
     if (!ranking.length) return;
     const limit = search.isPremium ? ranking.length : 3;
@@ -172,6 +182,15 @@ export default function RankingScreen() {
               testID="ranking-quick-add"
             />
           </View>
+        </Card>
+      ) : null}
+
+      {activeOptions.length >= 2 ? (
+        <Card variant="muted" testID="ranking-relative-score-hint">
+          <Text variant="caption">
+            Las puntuaciones son relativas a tus opciones activas: al añadir o quitar una, el orden puede cambiar.
+            Completa trayecto, fianza y contrato para que el ranking sea más fiable.
+          </Text>
         </Card>
       ) : null}
 
@@ -271,38 +290,11 @@ export default function RankingScreen() {
         ) : null}
         {ranking.length > 0 ? (
           <Button
-            label="Invitar a comparar"
-            variant="secondary"
-            icon="people-outline"
-            onPress={inviteToCompare}
-            testID="ranking-invite-button"
-          />
-        ) : null}
-        {ranking.length > 0 ? (
-          <Button
-            label="Compartir imagen"
-            variant="secondary"
-            icon="image-outline"
-            onPress={shareImage}
-            testID="ranking-share-image-button"
-          />
-        ) : null}
-        {ranking.length > 0 ? (
-          <Button
-            label="Compartir top"
+            label="Compartir"
             variant="secondary"
             icon="share-outline"
-            onPress={shareSummary}
+            onPress={openShareMenu}
             testID="ranking-share-button"
-          />
-        ) : null}
-        {ranking.length > 0 ? (
-          <Button
-            label="Exportar informe"
-            variant="secondary"
-            icon="document-text-outline"
-            onPress={exportReport}
-            testID="ranking-export-button"
           />
         ) : null}
       </View>

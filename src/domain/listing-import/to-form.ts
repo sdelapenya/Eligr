@@ -11,7 +11,7 @@ export function parsedListingToFormValues(parsed: ParsedListing): RentalFormValu
     monthlyPrice: parsed.monthlyPrice ?? base.monthlyPrice,
     locationLabel: parsed.locationLabel ?? base.locationLabel,
     size: parsed.size ?? base.size,
-    deposit: parsed.deposit ?? (parsed.monthlyPrice ?? base.deposit),
+    deposit: parsed.deposit ?? base.deposit,
     agencyFee: parsed.agencyFee ?? base.agencyFee,
     billsIncluded: parsed.billsIncluded ?? base.billsIncluded,
     estimatedBills: parsed.billsIncluded ? 0 : base.estimatedBills,

@@ -1,4 +1,4 @@
-appId: com.anonymous.eligr
+appId: com.sdelapenya.eligr
 ---
 - openLink: eligr://search/edit
 - extendedWaitUntil:

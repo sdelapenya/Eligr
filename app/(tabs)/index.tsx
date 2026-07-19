@@ -215,7 +215,10 @@ export default function RentalOptionsScreen() {
       {activeCount === 1 && !showOnboarding && !showSampleBanner ? (
         <Card variant="accent" style={styles.progressNudge} testID="options-add-second-nudge">
           <Text variant="subtitle">1 de 2 para comparar</Text>
-          <Text>Pega otro anuncio y verás el ranking con pros, contras y avisos.</Text>
+          <Text>
+            Con una sola opción el ranking es orientativo. Añade la segunda (pegar anuncio o rápido) y verás pros,
+            contras y avisos de verdad.
+          </Text>
           <View style={styles.nudgeActions}>
             <Button
               label="Añadir segunda"

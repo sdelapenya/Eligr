@@ -1,6 +1,6 @@
 import { router } from "expo-router";
 import { useMemo, useState } from "react";
-import { StyleSheet, Switch, View } from "react-native";
+import { Linking, StyleSheet, Switch, View } from "react-native";
 
 import { getActiveOptions, getScoringPool } from "@/domain/filters";
 import { getBackupImportPreview, countOptionsWithPhotos } from "@/domain/export-import";
@@ -27,6 +27,8 @@ import { Screen } from "@/ui/Screen";
 import { Text } from "@/ui/Text";
 import { ThemeMode, spacing } from "@/ui/theme";
 import { useThemeColors } from "@/ui/theme-context";
+
+const PRIVACY_POLICY_URL = "https://sergio.sdelapenya.dev/eligr/privacy/";
 
 const freeFeatures = [
   "1 búsqueda activa",
@@ -293,6 +295,21 @@ export default function PremiumScreen() {
             Premium próximamente: opciones ilimitadas y exportación completa del ranking.
           </Text>
         )}
+      </Card>
+
+      <Card>
+        <Text variant="subtitle">Privacidad</Text>
+        <Text variant="caption">
+          Eligr guarda tus datos en el dispositivo. Puedes leer la política completa en la web.
+        </Text>
+        <Button
+          label="Política de privacidad"
+          icon="document-text-outline"
+          onPress={() => {
+            void Linking.openURL(PRIVACY_POLICY_URL);
+          }}
+          testID="premium-privacy-link"
+        />
       </Card>
 
       <Card>

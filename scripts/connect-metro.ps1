@@ -30,7 +30,7 @@ if (-not $listening) {
 }
 
 Write-Host "OK Metro escuchando en $metroPort" -ForegroundColor Green
-& $adb shell am force-stop com.anonymous.eligr | Out-Null
+& $adb shell am force-stop com.sdelapenya.eligr | Out-Null
 Start-Sleep -Seconds 1
-& $adb shell monkey -p com.anonymous.eligr -c android.intent.category.LAUNCHER 1 | Out-Null
+& $adb shell monkey -p com.sdelapenya.eligr -c android.intent.category.LAUNCHER 1 | Out-Null
 Write-Host "Eligr reiniciada. Si sigue en blanco, pulsa R en Metro." -ForegroundColor Cyan

@@ -247,7 +247,7 @@ function Ensure-EligrInstalled {
   param([string]$TargetDeviceId, [string]$SdkRoot)
   $previous = $ErrorActionPreference
   $ErrorActionPreference = "SilentlyContinue"
-  $installed = (& $adb -s $TargetDeviceId shell pm path com.anonymous.eligr 2>$null | Out-String).Trim()
+  $installed = (& $adb -s $TargetDeviceId shell pm path com.sdelapenya.eligr 2>$null | Out-String).Trim()
   $ErrorActionPreference = $previous
   if ($installed -match "package:") { return $true }
   Write-Host "App Eligr no instalada; instalando APK debug..." -ForegroundColor Yellow
@@ -259,7 +259,7 @@ function Clear-EligrAppData {
   param([string]$TargetDeviceId)
   $previous = $ErrorActionPreference
   $ErrorActionPreference = "SilentlyContinue"
-  $out = (& $adb -s $TargetDeviceId shell pm clear com.anonymous.eligr 2>&1 | Out-String)
+  $out = (& $adb -s $TargetDeviceId shell pm clear com.sdelapenya.eligr 2>&1 | Out-String)
   $ErrorActionPreference = $previous
   if ($out -match "Exception|Error type|Failure calling") {
     Write-Host "AVISO: pm clear falló ($($out.Trim()))." -ForegroundColor Yellow
@@ -398,9 +398,9 @@ function Invoke-MetroWarmup {
 
 function Start-EligrActivity {
   param([string]$TargetDeviceId)
-  & $adb -s $TargetDeviceId shell am force-stop com.anonymous.eligr | Out-Null
+  & $adb -s $TargetDeviceId shell am force-stop com.sdelapenya.eligr | Out-Null
   Start-Sleep -Seconds 2
-  & $adb -s $TargetDeviceId shell am start -n "com.anonymous.eligr/.MainActivity" -a android.intent.action.MAIN -c android.intent.category.LAUNCHER | Out-Null
+  & $adb -s $TargetDeviceId shell am start -n "com.sdelapenya.eligr/.MainActivity" -a android.intent.action.MAIN -c android.intent.category.LAUNCHER | Out-Null
 }
 
 function Wait-ForAppUiReady {
@@ -519,7 +519,7 @@ Dismiss-BlockingDialogs -TargetDeviceId $deviceId
 Start-Sleep -Seconds 3
 Disable-PackageVerifier -TargetDeviceId $deviceId
 if (-not (Ensure-EligrInstalled -TargetDeviceId $deviceId -SdkRoot $SdkRoot)) {
-  Write-Error "No se pudo instalar com.anonymous.eligr. Arranca el emulador y ejecuta: npm run android:dev"
+  Write-Error "No se pudo instalar com.sdelapenya.eligr. Arranca el emulador y ejecuta: npm run android:dev"
 }
 
 if ($env:ELIGR_E2E_SKIP_METRO_RESTART -ne "1") {

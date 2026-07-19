@@ -38,10 +38,8 @@ export function statusFromNextActionChip(chip: string): RentalStatus | undefined
 export function statusFromImpressionChip(chip: string): RentalStatus | undefined {
   const trimmed = chip.trim();
   if (!trimmed) return undefined;
-  if (trimmed === "No convence, descartaría") return "discarded";
-  if (trimmed === "Me gustó, encaja con lo que busco" || trimmed === "Mejor de lo esperado en persona") return "favorite";
-  if (trimmed === "Dudas, hay cosas que confirmar" || trimmed === "Peor de lo esperado en persona") return "visited";
-  return undefined;
+  // Impresión solo marca "visitado". Favorito/descartado requieren chip explícito en «Próximo paso».
+  return "visited";
 }
 
 export function resolveVisitDebriefStatus(
@@ -52,7 +50,6 @@ export function resolveVisitDebriefStatus(
 ): RentalStatus {
   return (
     statusFromNextActionChip(nextAction.trim()) ??
-    statusFromImpressionChip(impression) ??
-    (checklistReviewed > 0 ? "visited" : currentStatus)
+    (impression.trim() || checklistReviewed > 0 ? "visited" : currentStatus)
   );
 }

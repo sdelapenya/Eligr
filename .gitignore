@@ -36,3 +36,7 @@ w.js
 
 expo-env.d.ts
 # @end expo-cli
+# Signing artifacts (por si se generan fuera de android/)
+*.keystore
+*.jks
+keystore.properties

@@ -10,15 +10,15 @@
     "newArchEnabled": true,
     "ios": {
       "supportsTablet": true,
-      "bundleIdentifier": "com.anonymous.eligr"
+      "bundleIdentifier": "com.sdelapenya.eligr"
     },
     "android": {
       "adaptiveIcon": {
-        "foregroundImage": "./assets/eligr-logo-icon.png",
+        "foregroundImage": "./assets/adaptive-icon.png",
         "backgroundColor": "#F7F3EA"
       },
-      "icon": "./assets/eligr-logo-icon.png",
-      "package": "com.anonymous.eligr",
+      "icon": "./assets/icon-1024.png",
+      "package": "com.sdelapenya.eligr",
       "versionCode": 1
     },
     "web": {
@@ -29,7 +29,7 @@
       [
         "expo-splash-screen",
         {
-          "image": "./assets/eligr-logo-icon.png",
+          "image": "./assets/splash-icon.png",
           "imageWidth": 200,
           "resizeMode": "contain",
           "backgroundColor": "#F5F1E8"
@@ -64,6 +64,9 @@
     ],
     "experiments": {
       "typedRoutes": true
+    },
+    "extra": {
+      "privacyPolicyUrl": "https://sergio.sdelapenya.dev/eligr/privacy/"
     }
   }
 }

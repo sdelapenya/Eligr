@@ -8,6 +8,7 @@ export type QuickAddInput = {
   photoUri?: string;
 };
 
+/** Alta rápida: solo título, precio y zona. El resto queda «desconocido» para no inflar el ranking. */
 export function buildQuickAddRental(
   input: QuickAddInput,
 ): Omit<RentalOption, "id" | "searchId" | "createdAt" | "updatedAt"> {
@@ -18,19 +19,19 @@ export function buildQuickAddRental(
     rentalType: "room",
     monthlyPrice,
     billsIncluded: false,
-    estimatedBills: 80,
-    deposit: monthlyPrice,
+    estimatedBills: 0,
+    deposit: 0,
     agencyFee: 0,
     locationLabel: input.locationLabel.trim(),
-    furnished: true,
-    bathroomType: "shared",
-    contractAvailable: true,
+    furnished: false,
+    bathroomType: "unknown",
+    contractAvailable: false,
     status: "new",
-    notes: "",
+    notes: "Alta rápida: completa fianza, gastos, trayecto y contrato cuando los sepas.",
     photoUri: input.photoUri?.trim() || undefined,
-    locationRating: 7,
-    roomQualityRating: 7,
-    personalFeelingRating: 7,
+    locationRating: 5,
+    roomQualityRating: 5,
+    personalFeelingRating: 5,
     visitChecklist: emptyVisitChecklist(),
     visitImpression: "",
     visitNextAction: "",

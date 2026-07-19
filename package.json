@@ -22,7 +22,10 @@
     "test:e2e:install": "powershell -NoProfile -ExecutionPolicy Bypass -File ./scripts/install-maestro.ps1",
     "test:e2e:apk": "powershell -NoProfile -ExecutionPolicy Bypass -File ./scripts/ensure-e2e-apk.ps1",
     "build:apk": "powershell -NoProfile -ExecutionPolicy Bypass -File ./scripts/build-apk.ps1",
-    "keystore:generate": "powershell -NoProfile -ExecutionPolicy Bypass -File ./scripts/generate-keystore.ps1"
+    "keystore:generate": "powershell -NoProfile -ExecutionPolicy Bypass -File ./scripts/generate-keystore.ps1",
+    "keystore:generate:linux": "bash ./scripts/generate-keystore.sh",
+    "eas:build:android": "npx eas-cli build --platform android --profile production",
+    "eas:credentials:android": "npx eas-cli credentials -p android"
   },
   "dependencies": {
     "@expo-google-fonts/dm-sans": "^0.4.2",

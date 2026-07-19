@@ -190,11 +190,9 @@ export function RentalIntakeWizard({ defaultMonthlyPrice, expressPaste = false, 
   };
 
   const saveExpress = () => {
+    // No inventar valoraciones: se usan las del formulario (neutras 5 por defecto).
     const normalized: RentalFormValues = {
       ...form,
-      locationRating: 7,
-      roomQualityRating: 7,
-      personalFeelingRating: 7,
       commuteMinutes:
         form.commuteMinutes !== undefined && !Number.isFinite(form.commuteMinutes) ? undefined : form.commuteMinutes,
     };
