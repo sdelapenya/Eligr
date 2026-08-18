@@ -2973,3 +2973,22 @@ git config --local core.sshCommand "C:/Windows/System32/OpenSSH/ssh.exe -o Batch
 
 No se modificó Docker ni se expuso la interfaz web de Gitea. `master` quedó sincronizada en GitHub y Gitea, incluido el commit funcional `992654c`.
 
+## Session 76 - Primer AAB de producción verificado (Codex, 2026-08-19)
+
+### EAS y firma
+- Cuenta `sdelapenya`, organización `sdelapenya-apps` y proyecto `@sdelapenya-apps/eligr` (`aa4c4cf5-bf2f-4e05-959a-3b3ada08830b`).
+- EAS generó y conserva el keystore de subida Android; queda exportar una copia segura fuera del repositorio.
+- El build inicial `0.1.0 (2)` era válido, pero se descartó al detectar permisos opcionales de plantilla que Eligr no usa.
+- `app.json` bloquea `SYSTEM_ALERT_WINDOW` y `WRITE_EXTERNAL_STORAGE`; `expo-image-picker` bloquea cámara y micrófono porque la app solo usa la fototeca.
+
+### Candidato Play
+- Build EAS: `a26873c0-3294-4db3-9786-d03d385d9a03`.
+- AAB: `dist/Eligr-0.1.0-build3-production.aab` (ignorado por Git), `com.sdelapenya.eligr`, `0.1.0 (3)`.
+- SHA-256: `1C08E5D15AD3FF9F34B5D1B6B6768CC61EA18F992764FA78A70967A05D614E92`.
+- `bundletool 1.18.1 validate` y `jarsigner -verify`: OK.
+- Manifiesto final sin `SYSTEM_ALERT_WINDOW`, `WRITE_EXTERNAL_STORAGE`, `CAMERA` ni `RECORD_AUDIO`.
+
+### Recommended next
+- Exportar/guardar el keystore EAS de forma segura.
+- Crear la ficha de Eligr en Play Console y subir el build 3 a Internal Testing.
+

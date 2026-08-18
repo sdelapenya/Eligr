@@ -1,6 +1,6 @@
 # HANDOFF — Eligr (Play Store)
 
-**Actualizado:** 2026-08-18
+**Actualizado:** 2026-08-19
 **Código:** `/home/sergio/lab/apps/Eligr`  
 **GitHub:** https://github.com/sdelapenya/Eligr  
 **También:** copia en disco duro portátil del PC (no en este servidor) — sync vía GitHub push/pull  
@@ -25,11 +25,13 @@
 - **E2E Android 2026-08-17:** recreado `Eligr_Pixel_35`, compilado e instalado el APK correcto y validados todos los flujos existentes: estándar `00–07` + `09` (**9/9 por cobertura final**) y express `08` (**1/1**), total **10/10**. Los falsos fallos del lote conjunto procedían de ejecutar varios YAML en paralelo contra una sola app; el runner ahora los serializa, conserva los aprobados y reintenta solo los fallidos hasta tres veces ante caídas del driver. El lote principal cerró seis estándar y la tanda complementaria restante terminó 3/3; el mecanismo de recuperación quedó ejercitado en esa tanda.
 - **Smoke físico 2026-08-18:** release arm64 actual compilada e instalada en Xiaomi `M2101K7BNY` (Android 13). Arranque frío autónomo, onboarding, ranking/compartir, backup JSON, alta rápida, cierre/reinicio con persistencia, detalle, visita completa y selector de fotos verificados por ADB y capturas, sin crash de Eligr. Se creó `Prueba móvil` como cuarta opción y se guardó una visita de prueba en el teléfono. Detectada y corregida una ambigüedad visual del alta rápida: los placeholders ahora llevan `Ej.` para no parecer valores ya introducidos. La APK instalada precede a este ajuste de copy; regenerar solo para la siguiente entrega.
 - **Git 2026-08-18:** `master` sincronizada en GitHub y Gitea, incluido el bloque funcional `992654c`. Gitea ya no expone HTTP `:3000` a la LAN; el remoto usa SSH seguro en `ssh://git@192.168.1.19:222/sdelapenya/Eligr.git`.
+- **AAB Play 2026-08-19:** proyecto vinculado a `@sdelapenya-apps/eligr`, keystore de producción creado en EAS y candidato `0.1.0 (3)` terminado/verificado. Bundletool y firma OK; package `com.sdelapenya.eligr`; sin `SYSTEM_ALERT_WINDOW`, escritura externa, cámara ni micrófono. Archivo local: `dist/Eligr-0.1.0-build3-production.aab` (ignorado por Git). Detalle y huellas en `docs/PLAY-SIGNING.md`.
 
 ## Qué NO está hecho
 
-- [ ] `eas login` + credentials Android + `eas build --profile production` (AAB) — **requiere login de Sergio**
+- [x] Login Expo, credenciales Android EAS y AAB de producción `0.1.0 (3)` verificado (2026-08-19)
 - [ ] Subida Play Internal Testing
+- [ ] Guardar copia segura del keystore de subida administrado por EAS fuera del repositorio
 - [x] README raíz actualizado (2026-08-17)
 - [ ] CV/portfolio que diga Kotlin para Eligr → corregir cuando se toque empleo-remoto
 - [x] Carrera de hidratación resuelta sin desbloquear datos iniciales (2026-08-17)
@@ -40,9 +42,9 @@
 
 ## Próximo paso
 
-1. Regenerar la release solo cuando se prepare la siguiente entrega (para incluir el ajuste de placeholders `Ej.`).
-2. EAS AAB cuando Sergio haga login (`docs/PLAY-SIGNING.md`).
-3. Subir el AAB a Play Internal Testing.
+1. Guardar una copia segura del keystore de subida EAS fuera del repositorio.
+2. Crear/configurar Eligr en Google Play Console.
+3. Subir `dist/Eligr-0.1.0-build3-production.aab` a Internal Testing.
 
 ## Decisiones
 
