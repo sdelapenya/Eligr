@@ -53,8 +53,10 @@ The repo is tracked on **two remotes** (branch `master`):
 
 | Remote | URL |
 |--------|-----|
-| `gitea` | `http://192.168.1.19:3000/sdelapenya/Eligr.git` |
+| `gitea` | `ssh://git@192.168.1.19:222/sdelapenya/Eligr.git` |
 | `github` | `https://github.com/sdelapenya/Eligr.git` |
+
+Gitea publica Git por SSH en el puerto `222`; su interfaz HTTP `3000` queda ligada a `127.0.0.1` en el servidor. En este PC, el repositorio local usa `C:/Windows/System32/OpenSSH/ssh.exe` para reutilizar la clave `sergio-windows` cargada en el agente SSH.
 
 After **important session changes**, when the user asks to upload (e.g. "sube los cambios", "handoff + push", "commit y push"):
 

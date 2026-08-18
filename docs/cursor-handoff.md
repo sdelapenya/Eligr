@@ -2958,3 +2958,18 @@ git push github master
 - Probar APK `dist/Eligr-0.1.0-release-arm64.apk` en móvil real y anotar fricciones UX.
 - Definir `applicationId` definitivo antes de Play Internal Testing.
 
+## Session 75 - Gitea por SSH y sincronización dual (Codex, 2026-08-18)
+
+### Diagnóstico
+- El servidor `192.168.1.19` estaba accesible y Gitea activo, pero Docker publicaba `127.0.0.1:3000->3000`; por eso la URL HTTP histórica fallaba desde la LAN.
+- Git SSH sí está publicado en `0.0.0.0:222->22` y reconoce la clave `sergio-windows` como usuario Gitea `sdelapenya`.
+
+### Configuración local actual
+
+```powershell
+git remote set-url gitea ssh://git@192.168.1.19:222/sdelapenya/Eligr.git
+git config --local core.sshCommand "C:/Windows/System32/OpenSSH/ssh.exe -o BatchMode=yes"
+```
+
+No se modificó Docker ni se expuso la interfaz web de Gitea. `master` quedó sincronizada en GitHub y Gitea, incluido el commit funcional `992654c`.
+

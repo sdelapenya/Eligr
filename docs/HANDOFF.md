@@ -24,6 +24,7 @@
 - **Tooling Android 2026-08-17:** `android/` se resincronizó con `app.json`; antes conservaba `com.anonymous.eligr` aunque la configuración pública ya usaba `com.sdelapenya.eligr`. `ensure-e2e-apk.ps1` ahora valida el package dentro del APK, verifica la instalación, espera ADB estable, usa `.gradle-local`, fija `NODE_ENV=development`, pasa ABI correctamente, limita Gradle a dos workers y limpia cachés CMake con rutas antiguas. Maestro arranca el AVD sin cargar snapshot.
 - **E2E Android 2026-08-17:** recreado `Eligr_Pixel_35`, compilado e instalado el APK correcto y validados todos los flujos existentes: estándar `00–07` + `09` (**9/9 por cobertura final**) y express `08` (**1/1**), total **10/10**. Los falsos fallos del lote conjunto procedían de ejecutar varios YAML en paralelo contra una sola app; el runner ahora los serializa, conserva los aprobados y reintenta solo los fallidos hasta tres veces ante caídas del driver. El lote principal cerró seis estándar y la tanda complementaria restante terminó 3/3; el mecanismo de recuperación quedó ejercitado en esa tanda.
 - **Smoke físico 2026-08-18:** release arm64 actual compilada e instalada en Xiaomi `M2101K7BNY` (Android 13). Arranque frío autónomo, onboarding, ranking/compartir, backup JSON, alta rápida, cierre/reinicio con persistencia, detalle, visita completa y selector de fotos verificados por ADB y capturas, sin crash de Eligr. Se creó `Prueba móvil` como cuarta opción y se guardó una visita de prueba en el teléfono. Detectada y corregida una ambigüedad visual del alta rápida: los placeholders ahora llevan `Ej.` para no parecer valores ya introducidos. La APK instalada precede a este ajuste de copy; regenerar solo para la siguiente entrega.
+- **Git 2026-08-18:** `master` sincronizada en GitHub y Gitea, incluido el bloque funcional `992654c`. Gitea ya no expone HTTP `:3000` a la LAN; el remoto usa SSH seguro en `ssh://git@192.168.1.19:222/sdelapenya/Eligr.git`.
 
 ## Qué NO está hecho
 
@@ -34,14 +35,14 @@
 - [x] Carrera de hidratación resuelta sin desbloquear datos iniciales (2026-08-17)
 - [x] `npm run lint` pasa sin errores ni avisos (el primer recorrido en frío puede tardar varios minutos)
 - [ ] Quedan 22 avisos transitivos de npm (10 moderate, 12 high) ligados principalmente a Expo/Metro; reevaluar al planificar la migración de SDK, sin `npm audit fix --force`
-- [ ] Gitea está tres commits por detrás de GitHub/local; sincronizar cuando se vaya a publicar este bloque
+- [x] Gitea y GitHub sincronizados (2026-08-18)
 - [x] Smoke Maestro `01-smoke` completado; AVD recreado y APK `com.sdelapenya.eligr` instalado correctamente (2026-08-17).
 
 ## Próximo paso
 
-1. Smoke manual en móvil/emulador (alta rápida, 2 opciones, visita, desglose, compartir, borrar foto, backup y reinicio).
-2. Commit/push a GitHub y Gitea cuando Sergio lo autorice.
-3. EAS AAB cuando Sergio haga login (`docs/PLAY-SIGNING.md`).
+1. Regenerar la release solo cuando se prepare la siguiente entrega (para incluir el ajuste de placeholders `Ej.`).
+2. EAS AAB cuando Sergio haga login (`docs/PLAY-SIGNING.md`).
+3. Subir el AAB a Play Internal Testing.
 
 ## Decisiones
 
