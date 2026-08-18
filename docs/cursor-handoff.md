@@ -1,6 +1,22 @@
 # Cursor Handoff - Eligr
 
-Last updated: 2026-07-03 (Cursor session 74: git dual remotes + push policy)
+Last updated: 2026-08-18 (Codex stabilization + physical smoke)
+
+> Estado operativo vigente: leer primero `docs/HANDOFF.md`. Este archivo conserva el historial detallado de sesiones y puede contener notas antiguas ya superadas.
+
+## Codex stabilization update (2026-08-17)
+
+- Eliminado el fallback que desbloqueaba la UI tras 4 segundos sin confirmar la hidratación de AsyncStorage.
+- Añadidos estados loading/slow/error/ready y reintento seguro en `StoreGate`.
+- Añadidas pruebas del invariante de hidratación; tests de dominio, typecheck y lint pasan.
+- Declarado `tsx` como devDependency para no descargarlo implícitamente al ejecutar tests.
+- README y plan técnico actualizados al MVP real.
+- El primer lint en frío fue anormalmente lento, pero el gate completo termina y pasa sin avisos tras corregir dos advertencias existentes.
+- `npm audit fix` sin `--force` redujo los avisos de 28 a 22 y eliminó el crítico. Los restantes requieren seguimiento con el SDK de Expo; no se forzó Expo 57.
+- Android generado sincronizado con `com.sdelapenya.eligr`. El runner E2E ahora rechaza APKs con package incorrecto y evita rutas Gradle/CMake largas heredadas del sandbox.
+- AVD `Eligr_Pixel_35` recreado; APK correcto compilado/instalado y `01-smoke` validado.
+- Cobertura Maestro completa confirmada: estándar `00–07` + `09` (9/9 por cobertura final) y express `08` (1/1), total 10/10. Los YAML multiarchivo se pisaban al correr en paralelo sobre un único emulador; `maestro-test.ps1` ahora ejecuta cada flujo secuencialmente, conserva los aprobados y reintenta solo los fallidos hasta tres veces ante caídas del driver. El lote principal confirmó seis estándar y la tanda complementaria restante terminó 3/3, ejercitando además la recuperación.
+- Smoke físico completado el 2026-08-18 en Xiaomi `M2101K7BNY` (Android 13) con release arm64 autónoma: arranque, onboarding, ranking/compartir, backup JSON, alta rápida, persistencia tras force-stop, detalle, visita y selector de fotos OK. La automatización se hizo con ADB/capturas porque MIUI bloqueó el APK auxiliar de Maestro. Hallazgo UX corregido en código: placeholders de título/precio/zona del alta rápida prefijados con `Ej.`. La APK instalada aún no incluye ese ajuste final de copy.
 
 ## Project Goal
 

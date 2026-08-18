@@ -16,6 +16,8 @@ export type ScreenshotOcrResult = {
 function getOcrModule(): typeof import("expo-mlkit-ocr") | null {
   if (Platform.OS === "web") return null;
   try {
+    // Optional native module: a static import crashes Expo Go/web before the fallback can run.
+    // eslint-disable-next-line @typescript-eslint/no-require-imports
     return require("expo-mlkit-ocr") as typeof import("expo-mlkit-ocr");
   } catch {
     return null;

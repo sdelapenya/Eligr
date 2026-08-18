@@ -26,9 +26,10 @@ appId: com.sdelapenya.eligr
 - assertVisible: "Activar preview premium"
 - scrollUntilVisible:
     element:
-      id: "premium-collaboration-card"
+      id: "collaboration-invite-button"
     direction: DOWN
     timeout: 60000
+    centerElement: true
 - assertVisible:
     id: "collaboration-invite-button"
 - scrollUntilVisible:

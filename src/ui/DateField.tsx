@@ -40,7 +40,7 @@ function buildCalendarCells(viewMonth: Date) {
   const month = viewMonth.getMonth();
   const firstWeekday = (new Date(year, month, 1).getDay() + 6) % 7;
   const daysInMonth = new Date(year, month + 1, 0).getDate();
-  const cells: Array<{ day: number | null; iso: string | null }> = [];
+  const cells: { day: number | null; iso: string | null }[] = [];
   for (let i = 0; i < firstWeekday; i++) cells.push({ day: null, iso: null });
   for (let day = 1; day <= daysInMonth; day++) {
     cells.push({ day, iso: formatIsoDate(new Date(year, month, day)) });

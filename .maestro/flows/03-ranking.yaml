@@ -37,6 +37,6 @@ appId: com.sdelapenya.eligr
     file: ../subflows/scroll-to-ranking-share.yaml
 - tapOn:
     id: "ranking-share-button"
-- pressKey: back
+- tapOn: "CANCELAR"
 - tapOn:
     id: "tab-options"

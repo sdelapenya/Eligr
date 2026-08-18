@@ -18,12 +18,18 @@ import { sampleRentalOptions, sampleSearch } from "../seed";
 import { getScoreContext } from "../score-context";
 import { getPendingTasks, filterPendingTasksForDisplay } from "../pending-tasks";
 import { resolveVisitDebriefStatus, statusFromImpressionChip } from "../visit-debrief";
+import { getHydrationPhase } from "../../store/hydration-state";
 
 function assert(condition: boolean, message: string) {
   if (!condition) throw new Error(`FAIL: ${message}`);
 }
 
 function run() {
+  assert(getHydrationPhase(false, null, false) === "loading", "hydration starts locked");
+  assert(getHydrationPhase(false, null, true) === "slow", "slow hydration stays locked");
+  assert(getHydrationPhase(false, "storage failed", true) === "error", "hydration error stays locked");
+  assert(getHydrationPhase(true, null, true) === "ready", "only completed hydration unlocks store");
+
   assert(statusFromImpressionChip("") === undefined, "empty impression does not change status");
   assert(statusFromImpressionChip("No convence, descartaría") === "visited", "impression never auto-discards");
   assert(

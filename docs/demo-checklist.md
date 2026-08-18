@@ -84,7 +84,7 @@ $env:ELIGR_E2E_FLOWS="07-quick-add,08-onboarding-skip"; npm run test:e2e
 $env:ELIGR_E2E_RESET="1"; npm run test:e2e
 ```
 
-Estado honesto: **5/6** flujos Maestro en condiciones estables (01–05 OK; 06 visita a veces falla por adb/Maestro). Si E2E falla, este guion manual es el respaldo para la defensa.
+Estado 2026-08-17: todos los flujos existentes han pasado (`00–07`, `09` y el express `08`: cobertura 10/10). El AVD fue recreado y el APK usa `com.sdelapenya.eligr`. El runner ejecuta ahora los YAML secuencialmente para que no compartan y modifiquen el mismo estado en paralelo, conserva los aprobados y reintenta solo los fallidos hasta tres veces cuando cae el driver. Si E2E falla por Maestro, este guion manual sigue siendo el respaldo para la demostración.
 
 ## Checklist rápido pre-clase
 

@@ -30,7 +30,9 @@ appId: com.sdelapenya.eligr
 - extendedWaitUntil:
     visible: "Habitacion luminosa en Delicias"
     timeout: 240000
-- extendedWaitUntil:
-    visible:
+- scrollUntilVisible:
+    element:
       id: "rental-card-rental-1"
-    timeout: 60000
+    direction: DOWN
+    timeout: 90000
+    centerElement: true

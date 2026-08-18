@@ -57,7 +57,9 @@ type EligrState = {
   rentalOptions: RentalOption[];
   appMeta: AppMeta;
   _hasHydrated: boolean;
+  _hydrationError: string | null;
   setHasHydrated: (value: boolean) => void;
+  setHydrationError: (message: string | null) => void;
   addRentalOption: (
     option: Omit<RentalOption, "id" | "searchId" | "createdAt" | "updatedAt" | "visitChecklist" | "visitImpression" | "visitNextAction"> &
       Partial<Pick<RentalOption, "visitChecklist" | "visitImpression" | "visitNextAction">>,
@@ -162,7 +164,9 @@ export const useEligrStore = create<EligrState>()(
       rentalOptions: isE2eExpressJourneyMode ? [] : sampleRentalOptions,
       appMeta: defaultAppMeta(),
       _hasHydrated: false,
+      _hydrationError: null,
       setHasHydrated: (value) => set({ _hasHydrated: value }),
+      setHydrationError: (message) => set({ _hydrationError: message }),
       addRentalOption: (option) => {
         const { rentalOptions, search } = get();
         if (!canAddRentalOption(getActiveOptions(rentalOptions).length, search.isPremium)) return false;
@@ -397,11 +401,17 @@ export const useEligrStore = create<EligrState>()(
         ...current,
         ...normalizePersistedSlice(persisted),
       }),
-      onRehydrateStorage: () => (state) => {
-        state?.setHasHydrated(true);
-        if (state) {
-          syncAllVisitReminders(state.rentalOptions, state.appMeta.visitRemindersEnabled).catch(() => undefined);
+      onRehydrateStorage: () => (state, error) => {
+        const store = useEligrStore.getState();
+        if (error) {
+          store.setHasHydrated(false);
+          store.setHydrationError(error instanceof Error ? error.message : "No se pudieron recuperar los datos guardados.");
+          return;
         }
+
+        store.setHydrationError(null);
+        store.setHasHydrated(true);
+        syncAllVisitReminders(store.rentalOptions, store.appMeta.visitRemindersEnabled).catch(() => undefined);
       },
     },
   ),

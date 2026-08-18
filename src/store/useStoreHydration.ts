@@ -2,35 +2,49 @@ import { useEffect, useState } from "react";
 
 import { isE2eMode } from "@/utils/e2e";
 
+import { getHydrationPhase } from "./hydration-state";
 import { useEligrStore } from "./useEligrStore";
 
 export function useStoreHydration() {
   const hasHydrated = useEligrStore((state) => state._hasHydrated);
-  const [ready, setReady] = useState(hasHydrated);
+  const error = useEligrStore((state) => state._hydrationError);
+  const [isSlow, setIsSlow] = useState(false);
 
   useEffect(() => {
-    const unsub = useEligrStore.persist.onFinishHydration(() => setReady(true));
-    setReady(useEligrStore.persist.hasHydrated());
-
-    const fallback = setTimeout(() => {
-      if (!useEligrStore.persist.hasHydrated()) {
-        useEligrStore.getState().setHasHydrated(true);
-        setReady(true);
-      }
-    }, 4000);
+    const unsubHydrate = useEligrStore.persist.onHydrate(() => {
+      useEligrStore.getState().setHasHydrated(false);
+      useEligrStore.getState().setHydrationError(null);
+      setIsSlow(false);
+    });
+    const unsubFinish = useEligrStore.persist.onFinishHydration(() => setIsSlow(false));
 
     return () => {
-      clearTimeout(fallback);
-      unsub();
+      unsubHydrate();
+      unsubFinish();
     };
   }, []);
 
   useEffect(() => {
-    if (!ready || !isE2eMode) return;
+    if (hasHydrated || error) {
+      setIsSlow(false);
+      return;
+    }
+    const slowTimer = setTimeout(() => setIsSlow(true), 4000);
+    return () => clearTimeout(slowTimer);
+  }, [error, hasHydrated]);
+
+  useEffect(() => {
+    if (!hasHydrated || !isE2eMode) return;
     const { completeOnboarding, dismissSampleBanner } = useEligrStore.getState();
     completeOnboarding();
     dismissSampleBanner();
-  }, [ready]);
+  }, [hasHydrated]);
 
-  return ready;
+  const retry = () => {
+    setIsSlow(false);
+    useEligrStore.getState().setHydrationError(null);
+    void useEligrStore.persist.rehydrate();
+  };
+
+  return { phase: getHydrationPhase(hasHydrated, error, isSlow), error, retry };
 }

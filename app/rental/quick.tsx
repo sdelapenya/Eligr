@@ -147,16 +147,16 @@ export default function QuickAddRentalScreen() {
       ) : (
         <Card style={styles.form} testID="quick-add-form-card">
           <RentalPhotoPicker value={photoUri} onChange={setPhotoUri} />
-          <Input label="Título" value={title} onChangeText={setTitle} placeholder="Habitación en Chamberí" testID="quick-add-title" />
+          <Input label="Título" value={title} onChangeText={setTitle} placeholder="Ej. Habitación en Chamberí" testID="quick-add-title" />
           <Input
             label="Precio (€/mes)"
             value={price}
             onChangeText={setPrice}
-            placeholder="750"
+            placeholder="Ej. 750"
             keyboardType="numeric"
             testID="quick-add-price"
           />
-          <Input label="Zona" value={zone} onChangeText={setZone} placeholder="Chamberí, Madrid" testID="quick-add-zone" />
+          <Input label="Zona" value={zone} onChangeText={setZone} placeholder="Ej. Chamberí, Madrid" testID="quick-add-zone" />
           <Text variant="caption">El trayecto se estimará (~75 min) hasta que lo edites. El resto usa valores razonables.</Text>
           <Button label="Guardar opción" icon="checkmark-outline" onPress={save} testID="quick-add-save" />
           <Button

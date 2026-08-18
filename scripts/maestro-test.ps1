@@ -88,7 +88,7 @@ function Ensure-EligrAvdRunning {
     if ((Get-AvdNameForDevice -TargetDeviceId $id) -eq $AvdName) { return }
   }
   Write-Host "Arrancando $AvdName (otros AVD, p. ej. FoodRanker, pueden seguir abiertos)..." -ForegroundColor Yellow
-  Start-Process -FilePath $emulator -ArgumentList "-avd", $AvdName -WindowStyle Normal | Out-Null
+  Start-Process -FilePath $emulator -ArgumentList "-avd", $AvdName, "-no-snapshot-load", "-no-window" -WindowStyle Hidden | Out-Null
 }
 
 function Ensure-EmulatorDevice {
@@ -252,7 +252,11 @@ function Ensure-EligrInstalled {
   if ($installed -match "package:") { return $true }
   Write-Host "App Eligr no instalada; instalando APK debug..." -ForegroundColor Yellow
   & (Join-Path $PSScriptRoot "ensure-e2e-apk.ps1") -DeviceId $TargetDeviceId -SdkRoot $SdkRoot
-  return ($LASTEXITCODE -eq 0)
+  $previous = $ErrorActionPreference
+  $ErrorActionPreference = "SilentlyContinue"
+  $installed = (& $adb -s $TargetDeviceId shell pm path com.sdelapenya.eligr 2>$null | Out-String).Trim()
+  $ErrorActionPreference = $previous
+  return ($installed -match "package:")
 }
 
 function Clear-EligrAppData {
@@ -466,40 +470,55 @@ function Invoke-Maestro {
     Write-Host "AVISO: adb no estable antes de Maestro." -ForegroundColor Yellow
   }
   $targetList = @($Targets)
-  Write-Host "maestro test ($($targetList.Count) flujos)..." -ForegroundColor DarkGray
+  Write-Host "maestro test ($($targetList.Count) flujos secuenciales)..." -ForegroundColor DarkGray
   $logFile = Join-Path $env:TEMP ("eligr-maestro-run-{0}.log" -f [Guid]::NewGuid().ToString("N"))
-  $exitCode = 1
-  $logText = ""
-  $maestroArgs = @("test", "--udid", $TargetDeviceId)
+  $suiteFailed = $false
+  $logParts = [System.Collections.Generic.List[string]]::new()
+  $failedTargets = [System.Collections.Generic.List[string]]::new()
+  $reinstallPending = [bool]$ReinstallDriver
   if ($ReinstallDriver) {
     Disable-PackageVerifier -TargetDeviceId $TargetDeviceId
     Write-Host "Reinstalando driver Maestro en $TargetDeviceId..." -ForegroundColor DarkGray
-    $maestroArgs += "--reinstall-driver"
   }
-  $maestroArgs += $targetList
-  try {
-    $output = & $maestro @maestroArgs 2>&1
-    $exitCode = $LASTEXITCODE
-    $logText = ($output | Out-String)
-    $output | Write-Host
-    try {
-      Set-Content -Path $logFile -Value $logText -Encoding UTF8 -ErrorAction Stop
-    } catch {
-      Write-Host "AVISO: no se pudo escribir log Maestro ($logFile): $($_.Exception.Message)" -ForegroundColor Yellow
+
+  foreach ($target in $targetList) {
+    $flowName = [System.IO.Path]::GetFileNameWithoutExtension($target)
+    Write-Host "`n--- Flujo $flowName ---" -ForegroundColor Cyan
+    $maestroArgs = @("test", "--udid", $TargetDeviceId)
+    if ($reinstallPending) {
+      $maestroArgs += "--reinstall-driver"
+      $reinstallPending = $false
     }
+    $maestroArgs += $target
+    $flowExitCode = 1
+    $flowLog = ""
+    try {
+      $output = & $maestro @maestroArgs 2>&1
+      $flowExitCode = $LASTEXITCODE
+      $flowLog = ($output | Out-String)
+      $output | Write-Host
+    } catch {
+      $flowLog = if ($output) { ($output | Out-String) } else { $_.Exception.Message }
+      Write-Host "Maestro falló en ${flowName}: $flowLog" -ForegroundColor Red
+      $flowExitCode = 1
+    }
+    $logParts.Add("=== $flowName ===`r`n$flowLog")
+    $flowPassed = $flowExitCode -eq 0 -or $flowLog -match "1/1 Flows Passed"
+    if (-not $flowPassed) {
+      $suiteFailed = $true
+      $failedTargets.Add($target)
+    }
+  }
+
+  $logText = $logParts -join "`r`n"
+  try {
+    Set-Content -Path $logFile -Value $logText -Encoding UTF8 -ErrorAction Stop
   } catch {
-    $logText = if ($output) { ($output | Out-String) } else { $_.Exception.Message }
-    Write-Host "Maestro falló: $logText" -ForegroundColor Red
-    $exitCode = 1
+    Write-Host "AVISO: no se pudo escribir log Maestro ($logFile): $($_.Exception.Message)" -ForegroundColor Yellow
   }
   $script:LastMaestroLog = $logText
-  if ($logText -match "(\d+)/(\d+) Flows Passed") {
-    $passed = [int]$Matches[1]
-    $total = [int]$Matches[2]
-    if ($passed -eq $total) { return 0 }
-  }
-  if ($logText -match "Flows Failed") { return 1 }
-  return $exitCode
+  $script:LastFailedMaestroTargets = @($failedTargets)
+  return $(if ($suiteFailed) { 1 } else { 0 })
 }
 
 $deviceId = Ensure-EmulatorDevice
@@ -591,7 +610,17 @@ $driverFailure = $LastMaestroLog -match "Maestro Android driver|instrumentation 
 $uiFailure = $LastMaestroLog -match "tab-options is visible|options-screen is visible|Assertion is false.*Delicias|Assertion is false.*intake-|Assertion is false.*Piso prueba"
 
 if ($suiteExit -ne 0 -and ($driverFailure -or $uiFailure)) {
-  Write-Host "`nReintento suite ($(if ($driverFailure) { 'driver Maestro' } else { 'UI / aserciones' }))..." -ForegroundColor Yellow
+  $retryAttempt = 0
+  $maxRetries = if ($driverFailure) { 3 } else { 1 }
+  while ($suiteExit -ne 0 -and ($driverFailure -or $uiFailure) -and $retryAttempt -lt $maxRetries) {
+    $retryAttempt++
+  $retryPaths = @($LastFailedMaestroTargets)
+  if ($retryPaths.Count -eq 0) {
+    $retryPaths = $flowPaths
+  }
+  $retryNames = @($retryPaths | ForEach-Object { [System.IO.Path]::GetFileNameWithoutExtension($_) })
+    Write-Host "`nReintento $retryAttempt/$maxRetries ($(if ($driverFailure) { 'driver Maestro' } else { 'UI / aserciones' }))..." -ForegroundColor Yellow
+  Write-Host "Solo fallidos: $($retryNames -join ', ')" -ForegroundColor DarkGray
   Stop-MaestroProcesses
   & $adb -s $deviceId wait-for-device | Out-Null
   if (-not (Wait-ForAdbOnline -TargetDeviceId $deviceId)) {
@@ -607,10 +636,13 @@ if ($suiteExit -ne 0 -and ($driverFailure -or $uiFailure)) {
   Invoke-MetroWarmup -Port $metroPort
   Launch-EligrAndWait -TargetDeviceId $deviceId -Port $metroPort -UiTimeoutSec 240 | Out-Null
   Start-Sleep -Seconds 3
-  if ($driverFailure) {
-    $suiteExit = Invoke-Maestro -Targets $flowPaths -TargetDeviceId $deviceId -Port $metroPort -ReinstallDriver
-  } else {
-    $suiteExit = Invoke-Maestro -Targets $flowPaths -TargetDeviceId $deviceId -Port $metroPort
+    if ($driverFailure -and $retryAttempt -eq 1) {
+      $suiteExit = Invoke-Maestro -Targets $retryPaths -TargetDeviceId $deviceId -Port $metroPort -ReinstallDriver
+    } else {
+      $suiteExit = Invoke-Maestro -Targets $retryPaths -TargetDeviceId $deviceId -Port $metroPort
+    }
+    $driverFailure = $LastMaestroLog -match "Maestro Android driver|instrumentation could not|Failed to install apk|dadb\.open|Broken pipe|Command failed \(tcp|UNAVAILABLE|Unable to launch app"
+    $uiFailure = $LastMaestroLog -match "tab-options is visible|options-screen is visible|Assertion is false.*Delicias|Assertion is false.*intake-|Assertion is false.*Piso prueba"
   }
 }
 

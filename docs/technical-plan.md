@@ -1,34 +1,16 @@
 # Technical Plan
 
-## Recommended Initial Stack
+## Chosen Stack
 
-Two strong options:
-
-### Option A: Android-first
-
-- Kotlin
-- Jetpack Compose
-- Firebase Auth
-- Firestore
-- Firebase Storage
-- RevenueCat or Google Play Billing
-
-Best if the first launch target is Android and we want to reuse experience from the current codebase.
-
-### Option B: Cross-platform app
+The stack decision is complete:
 
 - React Native with Expo
-- TypeScript
-- Supabase or Firebase
-- RevenueCat
+- TypeScript and Expo Router
+- Zustand with AsyncStorage for local-first persistence
+- React Hook Form and Zod
+- Maestro for Android end-to-end flows
 
-Best if we want Android, iOS, and a future web surface with shared product thinking.
-
-## Recommendation
-
-For Eligr, use React Native with Expo if the goal is a modern product that may reach Android and iOS quickly.
-
-Use Kotlin/Compose if the immediate priority is Android only and keeping close to existing Android/Firebase experience.
+The first release intentionally has no backend, authentication, billing, or marketplace supply. Supabase/Firebase and RevenueCat remain possible later phases, after validating the local decision workflow.
 
 ## Architecture Principles
 
@@ -38,25 +20,24 @@ Use Kotlin/Compose if the immediate priority is Android only and keeping close t
 - Treat AI as an enhancement, not the source of truth.
 - Design premium limits in the domain layer from the start.
 
-## Initial Modules
+## Current Modules
 
-- auth
 - searches
 - rental-options
 - scoring
 - comparison
-- billing
+- visits
+- backup-and-sharing
 - settings
 
-## First Implementation Milestone
+## Current Release Milestone
 
-Build a local-first prototype:
+Stabilize the local-first MVP for internal beta:
 
 - No backend.
-- Seed/sample data.
-- Add/edit/delete rental options.
-- Priority sliders.
-- Score calculation.
-- Ranking screen.
+- Reliable persistence and migrations.
+- Reproducible test, typecheck, and lint gates.
+- Android smoke test and Maestro flows.
+- Signed production AAB and Play Internal Testing.
 
-Once the workflow feels good, connect persistence and auth.
+Do not start backend/auth until real-user feedback shows that sync or collaboration is a release constraint.

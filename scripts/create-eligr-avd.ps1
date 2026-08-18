@@ -95,7 +95,10 @@ Write-Host "OK AVD $AvdName creado en $AvdDir" -ForegroundColor Green
 $emulator = Join-Path $SdkRoot "emulator\emulator.exe"
 $env:ANDROID_SDK_ROOT = $SdkRoot
 $env:ANDROID_HOME = $SdkRoot
-$listed = @(& $emulator -list-avds 2>&1)
+$previous = $ErrorActionPreference
+$ErrorActionPreference = "SilentlyContinue"
+$listed = @(& $emulator -list-avds 2>$null)
+$ErrorActionPreference = $previous
 if ($listed -contains $AvdName) {
   Write-Host "OK visible en emulator -list-avds" -ForegroundColor Green
 } else {

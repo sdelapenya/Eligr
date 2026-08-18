@@ -1,46 +1,74 @@
 # Eligr
 
-Eligr is a rental decision app that helps people compare rooms, flats, studios, and other rental options according to what matters most to them.
+Eligr es una aplicación local-first para guardar, comparar y elegir alquileres según las prioridades de cada persona.
 
-The core promise is simple:
+> Compara alquileres. Decide mejor.
 
-> Compare rentals and choose with confidence.
+No es un marketplace. El usuario incorpora las opciones que encuentra en portales, mensajes, capturas o visitas; Eligr calcula un ranking determinista y explica ventajas, riesgos y tradeoffs.
 
-## Product Focus
+## Estado
 
-Eligr is not intended to be another rental marketplace at the start. The first version is a decision layer on top of the listings users already find on portals, chats, and visits.
+El MVP funcional incluye:
 
-Users add the options they are considering, define their priorities, and Eligr ranks those rentals with a clear explanation of tradeoffs, risks, and best-fit recommendations.
+- búsqueda editable y opciones de alquiler;
+- alta manual, rápida, desde texto pegado y OCR local de capturas;
+- prioridades personalizables y scoring transparente;
+- ranking, comparación, filtros y elección final;
+- checklist, notas y recordatorios de visita;
+- fotos, backup/importación, informe y compartir;
+- persistencia local con Zustand y AsyncStorage;
+- onboarding, tema claro/oscuro y límite free de cinco opciones activas.
 
-## MVP
+El proyecto está en estabilización para beta interna. Billing, backend y RevenueCat quedan fuera de la versión 0.1.0.
 
-The MVP focuses on one complete workflow:
+## Stack
 
-1. Create a rental search.
-2. Add 3 to 10 rental options.
-3. Define personal priorities.
-4. Compare options using a transparent score.
-5. Get a recommended ranking with pros, cons, and warnings.
+- React Native 0.81 + Expo SDK 54
+- TypeScript + Expo Router
+- Zustand + AsyncStorage
+- React Hook Form + Zod
+- Maestro para E2E Android
 
-## Suggested Tagline
+## Desarrollo local
 
-Compare rentals. Decide better.
-
-Spanish version:
-
-Compara alquileres. Decide mejor.
-
-## Repository Structure
-
-```text
-Eligr/
-  README.md
-  docs/
-    product.md
-    mvp.md
-    monetization.md
-    domain-model.md
-    technical-plan.md
+```powershell
+npm install
+npm run typecheck
+npm test
+npm run start
 ```
 
-Application code will be added after choosing the initial stack.
+Para Android nativo (necesario para OCR):
+
+```powershell
+npm run android:dev
+```
+
+Comprobaciones adicionales:
+
+```powershell
+npm run lint
+npm run test:e2e
+```
+
+## Estructura
+
+```text
+app/                 pantallas y rutas Expo Router
+src/components/      componentes de producto
+src/domain/          reglas, scoring e importación/exportación
+src/store/           estado y persistencia local
+src/ui/              primitivas visuales y tema
+.maestro/            flujos E2E Android
+scripts/             desarrollo, build y firma
+docs/                producto, operación y handoff
+```
+
+## Publicación
+
+- Package Android/iOS: `com.sdelapenya.eligr`
+- EAS produce AAB en el perfil `production`.
+- La firma y publicación están documentadas en `docs/PLAY-SIGNING.md`.
+- La política de privacidad publicada se configura en `app.json`.
+
+Consulta `docs/HANDOFF.md` para el estado operativo vigente y `PROJECT_CONTEXT.md` para la visión original del producto.
